@@ -38,9 +38,9 @@ public class RolesService {
     }
 
     public void deleteData(String roleName){
-//        Roles role = repository.findById(roleName).orElseThrow(RuntimeException::new);
-//        role.setIsActive(false);
-        repository.deleteById(roleName);
+        Roles role = repository.findById(roleName).orElseThrow(RuntimeException::new);
+        role.setIsActive(false);
+        repository.save(role);
     }
 
     public boolean roleNameExists(String roleName){
