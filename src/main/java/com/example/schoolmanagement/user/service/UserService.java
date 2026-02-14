@@ -86,7 +86,7 @@ public class UserService {
         if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())){
             throw new RuntimeException("One of roles not found!");
         }
-        user.setRoles((Set<Roles>) roles);
+        user.setRoles(roles.stream().collect(Collectors.toSet()));
         return user;
     }
 }
