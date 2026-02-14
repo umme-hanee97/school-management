@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")})
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -43,4 +47,9 @@ public class User {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Roles> roles = new HashSet<>();
 
+    public User(String name, String email, @Nullable String encode) {
+        this.name = name;
+        this.email = email;
+        this.password = encode;
+    }
 }
