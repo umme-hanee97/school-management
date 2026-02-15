@@ -54,7 +54,7 @@ public class UserService {
     public String updateData(String username, UserDto userDto){
         User user = userRepository.findByName(username).orElseThrow(RuntimeException::new);
         mapToEntity(user, userDto);
-         return userRepository.save(user).getName();
+        return userRepository.save(user).getName();
     }
 
     public void delete(String username){
@@ -78,9 +78,9 @@ public class UserService {
     }
 
     private User mapToEntity(User user, UserDto dto){
-        user.setName(dto.getName());
-        user.setPassword(encoder().encode(dto.getPassword()));
-        user.setEmail(dto.getEmail());
+        if (dto.getName() != null) user.setName(dto.getName());
+        if (dto.getPassword() != null) user.setPassword(encoder().encode(dto.getPassword()));
+        if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         user.setEnabled(true);
         List<Roles> roles = rolesRepository.findAllById(dto.getRoles() == null ? Collections.EMPTY_LIST : dto.getRoles());
         if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())){
