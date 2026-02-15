@@ -12,26 +12,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-//@Component
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${school.app.jwtSecret")
-    private String jwtSecret;
+//    @Value("${school.app.jwtSecret}")
+    private String jwtSecret = "3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b";
 
-    @Value("${school.app.jwtExpirationMS}")
-    private int jwtExpirationMS;
+//    @Value("${school.app.jwtExpirationMS}")
+    private int jwtExpirationMS = 86400000;
 
-    @Value("${school.app.jwtCookieName}")
-    private String jwtCookie;
+//    @Value("${school.app.jwtCookieName}")
+    private String jwtCookie = "school-app";
 
     public String getJwtFromCookie(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);

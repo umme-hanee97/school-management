@@ -7,7 +7,6 @@ import com.example.schoolmanagement.common.security.jwt.JwtUtils;
 import com.example.schoolmanagement.common.security.service.UserDetailsImpl;
 import com.example.schoolmanagement.role.model.Roles;
 import com.example.schoolmanagement.role.repository.RolesRepository;
-import com.example.schoolmanagement.role.service.RolesService;
 import com.example.schoolmanagement.user.dto.UserDto;
 import com.example.schoolmanagement.user.model.User;
 import com.example.schoolmanagement.user.repository.UserRepository;
@@ -26,30 +25,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
 
-    private AuthenticationManager manager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private RolesRepository rolesRepository;
 
     private PasswordEncoder encoder;
 
-    private JwtUtils jwtUtils;
+    private JwtUtils jwtUtils = new JwtUtils();
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest request){
-        Authentication authentication = manager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         ResponseCookie cookie = jwtUtils.generateJwtCookie(userDetails);
@@ -75,8 +77,36 @@ public class AuthController {
         if (strRoles != null){
             Roles oRoles = rolesRepository.findById("USER").orElseThrow(() -> new RuntimeException("Error: Role is not found!"));
             roles.add(oRoles);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role){
+                    case "ADMIN": Roles adminRole = rolesRepository.findById("ADMIN").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(adminRole);
+                    break;
+                    case "MODERATOR": Roles moderatorRole = rolesRepository.findById("MODERATOR").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(moderatorRole);
+                    break;
+                    case "STUDENT": Roles studentRole = rolesRepository.findById("STUDENT").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(studentRole);
+                    break;
+                    case "TEACHER": Roles teacherRole = rolesRepository.findById("TEACHER").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(teacherRole);
+                    break;
+                    default:
+                        Roles userRole = rolesRepository.findById("USER").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(userRole);
+                }
+            });
         }
-        return ResponseEntity.ok(user);
+        user.setRoles((Set<Roles>) roles);
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User Registered Successfully!"));
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> logoutUser(){
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(new MessageResponse("You've been signed out!"));
     }
 
 }
