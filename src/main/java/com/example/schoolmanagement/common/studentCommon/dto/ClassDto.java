@@ -12,4 +12,5 @@ import lombok.Setter;
 public class ClassDto {
     private Long id;
     private String className;
+    private String classNameWord;
 }

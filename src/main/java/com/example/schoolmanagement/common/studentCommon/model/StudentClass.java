@@ -19,5 +19,7 @@ public class StudentClass {
     private Long id;
     @Column(nullable = false, name = "class_name")
     private String className;
+    @Column(nullable = false, name = "class_name_word")
+    private String classNameWord;
 
 }
