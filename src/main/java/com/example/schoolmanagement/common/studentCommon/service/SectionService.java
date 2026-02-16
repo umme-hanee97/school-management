@@ -4,6 +4,7 @@ import com.example.schoolmanagement.common.studentCommon.dto.SectionDto;
 import com.example.schoolmanagement.common.studentCommon.model.StudentSection;
 import com.example.schoolmanagement.common.studentCommon.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class SectionService {
     private SectionRepository repository;
 
     public List<SectionDto> getAll(){
-        List<StudentSection> sections = repository.findAll();
+        List<StudentSection> sections = repository.findAll(Sort.by("sectionName"));
         return sections.stream().map(section -> mapToDto(section, new SectionDto())).toList();
     }
 

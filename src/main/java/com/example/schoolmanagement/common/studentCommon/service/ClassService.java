@@ -39,13 +39,13 @@ public class ClassService {
 
     private StudentClass mapToEntity(StudentClass studentClass, ClassDto dto) {
         if (dto.getClassName() != null) studentClass.setClassName(dto.getClassName());
-        if (dto.getClassNameWord() != null) studentClass.setClassNameWord(dto.getClassNameWord());
+        if (dto.getClassNameCode() != null) studentClass.setClassNameCode(dto.getClassNameCode());
         return studentClass;
     }
 
     private ClassDto mapToDto(StudentClass studentClass, ClassDto classDto) {
         if (studentClass.getClassName() != null) classDto.setClassName(studentClass.getClassName());
-        if (studentClass.getClassNameWord() != null) classDto.setClassNameWord(studentClass.getClassNameWord());
+        if (studentClass.getClassNameCode() != null) classDto.setClassNameCode(studentClass.getClassNameCode());
         return classDto;
     }
 }

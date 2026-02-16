@@ -6,20 +6,18 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
+@Table(name = "student_subjects")
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "student_class")
-public class StudentClass {
-
+@Entity
+public class StudentSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, name = "class_name")
-    private String className;
-    @Column(nullable = false, name = "class_name_code")
-    private String classNameCode;
-
+    @Column(nullable = false, name = "subject_name")
+    private String subjectName;
+    @Column(nullable = false, name = "subject_code")
+    private String subjectCode;
 }
