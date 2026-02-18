@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.common.studentCommon.dto;
+package com.example.schoolmanagement.common.lookup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

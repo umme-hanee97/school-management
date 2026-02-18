@@ -1,8 +1,8 @@
-package com.example.schoolmanagement.common.studentCommon.controller;
+package com.example.schoolmanagement.common.lookup.controller;
 
 import com.example.schoolmanagement.common.model.MessageResponse;
-import com.example.schoolmanagement.common.studentCommon.dto.ClassDto;
-import com.example.schoolmanagement.common.studentCommon.service.ClassService;
+import com.example.schoolmanagement.common.lookup.dto.SubjectDto;
+import com.example.schoolmanagement.common.lookup.service.SubjectService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/class")
-public class ClassController {
+@RequestMapping("/api/v1/lookup/subjects")
+public class SubjectController {
 
     @Autowired
-    private ClassService service;
+    private SubjectService service;
 
     @GetMapping
     public ResponseEntity<?> getAllData(){
-        List<ClassDto> classes = service.getAll();
-        return ResponseEntity.ok(classes);
+        List<SubjectDto> subjects = service.getAll();
+        return ResponseEntity.ok(subjects);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        ClassDto classDto = service.getById(id);
-        return ResponseEntity.ok(classDto);
+        SubjectDto subject = service.getById(id);
+        return ResponseEntity.ok(subject);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody ClassDto classDto){
+    public ResponseEntity<?> saveData(@RequestBody SubjectDto subject){
         try {
-            service.saveData(classDto);
+            service.saveData(subject);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error occurred!"));
         }
@@ -40,8 +40,8 @@ public class ClassController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid ClassDto classDto){
-        service.updateData(id, classDto);
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SubjectDto subject){
+        service.updateData(id, subject);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.common.studentCommon.dto;
+package com.example.schoolmanagement.common.lookup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class ClassDto {
+public class RelationshipDto {
     private Long id;
-    private String className;
-    private String classNameCode;
+    private String relationship;
 }

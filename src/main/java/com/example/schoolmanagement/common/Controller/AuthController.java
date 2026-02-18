@@ -20,17 +20,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping(path = "/api/v1/auth", produces = "application/json")
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class AuthController {
 
     @Autowired
@@ -45,7 +44,7 @@ public class AuthController {
     @Autowired
     private RolesRepository rolesRepository;
 
-    private PasswordEncoder encoder;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     private JwtUtils jwtUtils = new JwtUtils();
 
@@ -61,11 +60,14 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto){
+        MessageResponse messageResponse = new MessageResponse();
         if (userService.usernameExists(userDto.getName())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: username already exists!"));
+                messageResponse.setMessage("Username already exists!");
+            return ResponseEntity.badRequest().body(messageResponse);
         }
         if (userService.emailExists(userDto.getEmail())){
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: email already exists!"));
+            messageResponse.setMessage("Email already exists!");
+            return ResponseEntity.badRequest().body(messageResponse);
         }
         userDto.setRoles(Collections.singleton("USER"));
         User user = new User(userDto.getName(), userDto.getEmail(), encoder.encode(userDto.getPassword()));
@@ -98,9 +100,10 @@ public class AuthController {
                 }
             });
         }
-        user.setRoles((Set<Roles>) roles);
+        user.setRoles(roles.stream().collect(Collectors.toSet()));
         userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("User Registered Successfully!"));
+        messageResponse.setMessage("User Registered Successfully!");
+        return ResponseEntity.ok(messageResponse);
     }
 
     @PostMapping("/signout")

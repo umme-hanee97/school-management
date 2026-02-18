@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.common.studentCommon.model;
+package com.example.schoolmanagement.common.lookup.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,12 +11,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "student_section")
-public class StudentSection {
-
+@Table(name = "student_class")
+public class StudentClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, name = "section_name")
-    private String sectionName;
+    @Column(nullable = false, name = "class_name")
+    private String className;
+    @Column(nullable = false, name = "class_name_code")
+    private String classNameCode;
+
 }

@@ -43,7 +43,7 @@ public class User {
     private boolean isExpiredAccount = true;
     @Column(name="is_locked_account")
     private boolean isLockedAccount=true;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Roles> roles = new HashSet<>();
 

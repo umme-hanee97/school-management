@@ -1,8 +1,8 @@
-package com.example.schoolmanagement.common.studentCommon.controller;
+package com.example.schoolmanagement.common.lookup.controller;
 
 import com.example.schoolmanagement.common.model.MessageResponse;
-import com.example.schoolmanagement.common.studentCommon.dto.SectionDto;
-import com.example.schoolmanagement.common.studentCommon.service.SectionService;
+import com.example.schoolmanagement.common.lookup.dto.ClassDto;
+import com.example.schoolmanagement.common.lookup.service.ClassService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/section")
-public class SectionController {
+@RequestMapping("/api/v1/lookup/class")
+public class ClassController {
 
     @Autowired
-    private SectionService service;
+    private ClassService service;
 
     @GetMapping
     public ResponseEntity<?> getAllData(){
-        List<SectionDto> sections = service.getAll();
-        return ResponseEntity.ok(sections);
+        List<ClassDto> classes = service.getAll();
+        return ResponseEntity.ok(classes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        SectionDto sectionDto = service.getById(id);
-        return ResponseEntity.ok(sectionDto);
+        ClassDto classDto = service.getById(id);
+        return ResponseEntity.ok(classDto);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody SectionDto sectionDto){
+    public ResponseEntity<?> saveData(@RequestBody ClassDto classDto){
         try {
-            service.saveData(sectionDto);
+            service.saveData(classDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error occurred!"));
         }
@@ -40,8 +40,8 @@ public class SectionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SectionDto sectionDto){
-        service.updateData(id, sectionDto);
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid ClassDto classDto){
+        service.updateData(id, classDto);
         return ResponseEntity.ok().build();
     }
 }

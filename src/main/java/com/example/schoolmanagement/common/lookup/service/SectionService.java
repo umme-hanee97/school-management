@@ -1,8 +1,8 @@
-package com.example.schoolmanagement.common.studentCommon.service;
+package com.example.schoolmanagement.common.lookup.service;
 
-import com.example.schoolmanagement.common.studentCommon.dto.SectionDto;
-import com.example.schoolmanagement.common.studentCommon.model.StudentSection;
-import com.example.schoolmanagement.common.studentCommon.repository.SectionRepository;
+import com.example.schoolmanagement.common.lookup.dto.SectionDto;
+import com.example.schoolmanagement.common.lookup.model.StudentSection;
+import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

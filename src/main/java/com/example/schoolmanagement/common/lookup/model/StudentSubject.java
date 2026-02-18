@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.common.studentCommon.model;
+package com.example.schoolmanagement.common.lookup.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

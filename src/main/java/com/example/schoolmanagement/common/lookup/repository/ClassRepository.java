@@ -1,6 +1,6 @@
-package com.example.schoolmanagement.common.studentCommon.repository;
+package com.example.schoolmanagement.common.lookup.repository;
 
-import com.example.schoolmanagement.common.studentCommon.model.StudentClass;
+import com.example.schoolmanagement.common.lookup.model.StudentClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
