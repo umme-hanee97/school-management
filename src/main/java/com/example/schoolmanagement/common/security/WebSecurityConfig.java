@@ -34,8 +34,6 @@ public class WebSecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    private static final String[] PUBLIC_URLS={"/swagger-ui/**", "/v3/api-docs/**", "/api/auth/**", "/registerNewUser", "/api/test/**", "signup", "//testController/**", "/updateUser",};
-
     @Autowired
     private UserDetailsServiceImpl service;
 

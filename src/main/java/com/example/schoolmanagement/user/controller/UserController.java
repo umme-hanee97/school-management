@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<?> getUserByName(@PathVariable String username){
         UserDto user = service.get(username);
         return ResponseEntity.ok(user);

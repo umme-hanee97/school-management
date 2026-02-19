@@ -35,6 +35,8 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+    @Column(name = "is_active")
+    private boolean isActive = false;
     @Column(name = "is_enabled")
     private boolean isEnabled = true;
     @Column(name="is_expired_credential")
