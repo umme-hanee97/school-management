@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class UserController {
 
     @Autowired
