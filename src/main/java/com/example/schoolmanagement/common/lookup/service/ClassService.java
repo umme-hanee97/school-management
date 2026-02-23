@@ -14,7 +14,7 @@ public class ClassService {
     private ClassRepository repository;
     
     public List<ClassDto> getAll(){
-        List<StudentClass> classes = repository.findAll(Sort.by("className"));
+        List<StudentClass> classes = repository.findAll(Sort.by("id"));
         return classes.stream().map(studentClass -> mapToDto(studentClass, new ClassDto())).toList();
     }
     

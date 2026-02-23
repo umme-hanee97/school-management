@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/lookup/section")
+@RequestMapping("/api/v1/lookup/sections")
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class SectionController {
 
     @Autowired
