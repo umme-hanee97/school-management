@@ -1,5 +1,7 @@
 package com.example.schoolmanagement.student.service;
 
+import com.example.schoolmanagement.common.lookup.model.StudentSubject;
+import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
@@ -12,6 +14,8 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Autowired
     private TeacherRepository repository;
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     @Override
     public List<TeacherDto> getAll() {
@@ -64,7 +68,10 @@ public class TeacherServiceImpl implements TeacherService{
         dto.setPhoneNumber(teacher.getPhoneNumber());
         dto.setAddress(teacher.getAddress());
         dto.setDateOfBirth(teacher.getDateOfBirth().toString());
-//        dto.setSubjects();
+        List<String> subjects = teacher.getSubjects().stream()
+                .map(subject -> subject.getSubjectName())
+                .toList();
+        dto.setSubjectNames(subjects);
         return dto;
     }
 
@@ -75,6 +82,14 @@ public class TeacherServiceImpl implements TeacherService{
         teacher.setEmail(dto.getEmail());
         teacher.setPhoneNumber(dto.getPhoneNumber());
         teacher.setAddress(dto.getAddress());
+        List<StudentSubject> subjects = dto.getSubjectIds().stream()
+                .map(subjectId -> {
+                    StudentSubject subject = subjectRepository.findById(subjectId).get();
+//                    subject.setId(subjectId);
+                    return subject;
+                })
+                .toList();
+        teacher.setSubjects(subjects);
         return teacher;
     }
 
