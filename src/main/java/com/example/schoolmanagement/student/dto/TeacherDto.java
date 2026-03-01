@@ -21,7 +21,7 @@ public class TeacherDto {
     private String dateOfBirth;
     private List<Long> subjectIds;
     private List<String> subjectNames;
-    private List<Attachment> attachments;
-    private boolean isActive = true;
+    private List<Long> attachments;
+//    private boolean isActive = true;
 
 }

@@ -62,34 +62,35 @@ public class TeacherServiceImpl implements TeacherService{
 
     private TeacherDto mapToDto(Teacher teacher){
         TeacherDto dto = new TeacherDto();
-        dto.setId(teacher.getId());
-        dto.setName(teacher.getName());
-        dto.setEmail(teacher.getEmail());
-        dto.setPhoneNumber(teacher.getPhoneNumber());
-        dto.setAddress(teacher.getAddress());
-        dto.setDateOfBirth(teacher.getDateOfBirth().toString());
-        List<String> subjects = teacher.getSubjects().stream()
+        if (teacher.getId() != null) dto.setId(teacher.getId());
+        if (teacher.getName() != null) dto.setName(teacher.getName());
+        if (teacher.getEmail() != null) dto.setEmail(teacher.getEmail());
+        if (teacher.getPhoneNumber() != null) dto.setPhoneNumber(teacher.getPhoneNumber());
+        if (teacher.getAddress() != null) dto.setAddress(teacher.getAddress());
+        if (teacher.getDateOfBirth() != null) dto.setDateOfBirth(teacher.getDateOfBirth().toString());
+        if (teacher.getSubjects() != null) {List<String> subjects = teacher.getSubjects().stream()
                 .map(subject -> subject.getSubjectName())
                 .toList();
-        dto.setSubjectNames(subjects);
+        dto.setSubjectNames(subjects);}
         return dto;
     }
 
     private Teacher mapToEntity(TeacherDto dto){
         Teacher teacher = new Teacher();
-        teacher.setId(dto.getId());
-        teacher.setName(dto.getName());
-        teacher.setEmail(dto.getEmail());
-        teacher.setPhoneNumber(dto.getPhoneNumber());
-        teacher.setAddress(dto.getAddress());
-        List<StudentSubject> subjects = dto.getSubjectIds().stream()
+        if (dto.getId() != null) teacher.setId(dto.getId());
+        if (dto.getName() != null) teacher.setName(dto.getName());
+        if (dto.getEmail() != null) teacher.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) teacher.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getAddress() != null) teacher.setAddress(dto.getAddress());
+        if (dto.getDateOfBirth() != null) teacher.setDateOfBirth(dto.getDateOfBirth());
+        if (dto.getSubjectIds() != null) {List<StudentSubject> subjects = dto.getSubjectIds().stream()
                 .map(subjectId -> {
                     StudentSubject subject = subjectRepository.findById(subjectId).get();
 //                    subject.setId(subjectId);
                     return subject;
                 })
                 .toList();
-        teacher.setSubjects(subjects);
+        teacher.setSubjects(subjects);}
         return teacher;
     }
 
