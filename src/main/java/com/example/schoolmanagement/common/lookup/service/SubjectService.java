@@ -39,12 +39,14 @@ public class SubjectService {
     }
 
     private StudentSubject mapToEntity(StudentSubject subject, SubjectDto dto) {
+        if (dto.getId() != null) subject.setId(dto.getId());
         if (dto.getSubjectName() != null) subject.setSubjectName(dto.getSubjectName());
         if (dto.getSubjectCode() != null) subject.setSubjectCode(dto.getSubjectCode());
         return subject;
     }
 
     private SubjectDto mapToDto(StudentSubject subject, SubjectDto dto) {
+        if (subject.getId() != null) dto.setId(subject.getId());
         if (subject.getSubjectName() != null) dto.setSubjectName(subject.getSubjectName());
         if (subject.getSubjectCode() != null) dto.setSubjectCode(subject.getSubjectCode());
         return dto;
