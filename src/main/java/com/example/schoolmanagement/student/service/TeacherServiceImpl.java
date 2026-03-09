@@ -5,6 +5,8 @@ import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
+import com.example.schoolmanagement.user.model.User;
+import com.example.schoolmanagement.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,6 +18,8 @@ public class TeacherServiceImpl implements TeacherService{
     private TeacherRepository repository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<TeacherDto> getAll() {
@@ -33,14 +37,22 @@ public class TeacherServiceImpl implements TeacherService{
 
     @Override
     public String saveData(TeacherDto dto) {
-        Teacher teacher = mapToEntity(dto);
+        Teacher teacher = repository.findByEmail(dto.getEmail());
+        Boolean hasUser = userService.emailExists(dto.getEmail());
+        if (!hasUser) {
+            throw new RuntimeException("User not found with email: " + dto.getEmail());
+        }
+        if (teacher != null) {
+            dto.setId(teacher.getId());
+        }
+         teacher = mapToEntity(dto);
         return repository.save(teacher).getName();
     }
 
     @Override
     public String updateData(Long id, TeacherDto dto) {
         Teacher teacher = repository.findById(id).orElseThrow(RuntimeException::new);
-        if (teacher != null) {
+        if (teacher == null) {
             throw new RuntimeException("Teacher not found with id: " + id);
         } else {
             teacher = mapToEntity(dto);
