@@ -1,7 +1,7 @@
 package com.example.schoolmanagement.common.security.service;
 
-import com.example.schoolmanagement.user.model.User;
-import com.example.schoolmanagement.user.repository.UserRepository;
+import com.example.schoolmanagement.common.user.model.User;
+import com.example.schoolmanagement.common.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

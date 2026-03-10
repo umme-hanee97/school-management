@@ -6,6 +6,7 @@ import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -14,25 +15,25 @@ public class SectionService {
     @Autowired
     private SectionRepository repository;
 
-    public List<SectionDto> getAll(){
+    public List<SectionDto> getAll() {
         List<StudentSection> sections = repository.findAll(Sort.by("sectionName"));
         return sections.stream().map(section -> mapToDto(section, new SectionDto())).toList();
     }
 
-    public SectionDto getById(Long id){
+    public SectionDto getById(Long id) {
         SectionDto dto = new SectionDto();
         StudentSection section = repository.findById(id).get();
         mapToDto(section, dto);
         return dto;
     }
 
-    public String saveData(SectionDto dto){
+    public String saveData(SectionDto dto) {
         StudentSection section = new StudentSection();
         mapToEntity(section, dto);
         return repository.save(section).getSectionName();
     }
 
-    public String updateData(Long id, SectionDto dto){
+    public String updateData(Long id, SectionDto dto) {
         StudentSection section = repository.findById(id).orElseThrow(RuntimeException::new);
         mapToEntity(section, dto);
         return repository.save(section).getSectionName();

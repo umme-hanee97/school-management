@@ -18,19 +18,19 @@ public class RelationController {
     private RelationService service;
 
     @GetMapping
-    public ResponseEntity<?> getAllData(){
+    public ResponseEntity<?> getAllData() {
         List<RelationshipDto> relationships = service.getAll();
         return ResponseEntity.ok(relationships);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         RelationshipDto relationship = service.getById(id);
         return ResponseEntity.ok(relationship);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody RelationshipDto relationship){
+    public ResponseEntity<?> saveData(@RequestBody RelationshipDto relationship) {
         try {
             service.saveData(relationship);
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class RelationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid RelationshipDto relationship){
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid RelationshipDto relationship) {
         service.updateData(id, relationship);
         return ResponseEntity.ok().build();
     }

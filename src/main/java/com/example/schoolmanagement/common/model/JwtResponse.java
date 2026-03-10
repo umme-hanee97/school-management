@@ -1,6 +1,6 @@
 package com.example.schoolmanagement.common.model;
 
-import com.example.schoolmanagement.user.model.User;
+import com.example.schoolmanagement.common.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

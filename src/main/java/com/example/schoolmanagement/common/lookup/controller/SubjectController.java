@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -19,19 +20,19 @@ public class SubjectController {
     private SubjectService service;
 
     @GetMapping
-    public ResponseEntity<?> getAllData(){
+    public ResponseEntity<?> getAllData() {
         List<SubjectDto> subjects = service.getAll();
         return ResponseEntity.ok(subjects);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         SubjectDto subject = service.getById(id);
         return ResponseEntity.ok(subject);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody SubjectDto subject){
+    public ResponseEntity<?> saveData(@RequestBody SubjectDto subject) {
         try {
             service.saveData(subject);
         } catch (Exception e) {
@@ -41,7 +42,7 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SubjectDto subject){
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SubjectDto subject) {
         service.updateData(id, subject);
         return ResponseEntity.ok().build();
     }

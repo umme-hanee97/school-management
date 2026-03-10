@@ -5,14 +5,15 @@ import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
-import com.example.schoolmanagement.user.model.User;
-import com.example.schoolmanagement.user.service.UserService;
+import com.example.schoolmanagement.common.user.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class TeacherServiceImpl implements TeacherService{
+public class TeacherServiceImpl implements TeacherService {
 
     @Autowired
     private TeacherRepository repository;
@@ -35,6 +36,7 @@ public class TeacherServiceImpl implements TeacherService{
         return teacher != null ? mapToDto(teacher) : new TeacherDto();
     }
 
+    @Transactional
     @Override
     public String saveData(TeacherDto dto) {
         Teacher teacher = repository.findByEmail(dto.getEmail());
@@ -45,7 +47,7 @@ public class TeacherServiceImpl implements TeacherService{
         if (teacher != null) {
             dto.setId(teacher.getId());
         }
-         teacher = mapToEntity(dto);
+        teacher = mapToEntity(dto);
         return repository.save(teacher).getName();
     }
 
@@ -72,22 +74,24 @@ public class TeacherServiceImpl implements TeacherService{
         }
     }
 
-    private TeacherDto mapToDto(Teacher teacher){
+    private TeacherDto mapToDto(Teacher teacher) {
         TeacherDto dto = new TeacherDto();
         if (teacher.getId() != null) dto.setId(teacher.getId());
         if (teacher.getName() != null) dto.setName(teacher.getName());
         if (teacher.getEmail() != null) dto.setEmail(teacher.getEmail());
         if (teacher.getPhoneNumber() != null) dto.setPhoneNumber(teacher.getPhoneNumber());
         if (teacher.getAddress() != null) dto.setAddress(teacher.getAddress());
-        if (teacher.getDateOfBirth() != null) dto.setDateOfBirth(teacher.getDateOfBirth().toString());
-        if (teacher.getSubjects() != null) {List<String> subjects = teacher.getSubjects().stream()
-                .map(subject -> subject.getSubjectName())
-                .toList();
-        dto.setSubjectNames(subjects);}
+        if (teacher.getDateOfBirth() != null) dto.setDateOfBirth(teacher.getDateOfBirth());
+        if (teacher.getSubjects() != null) {
+            List<String> subjects = teacher.getSubjects().stream()
+                    .map(subject -> subject.getSubjectName())
+                    .toList();
+            dto.setSubjectNames(subjects);
+        }
         return dto;
     }
 
-    private Teacher mapToEntity(TeacherDto dto){
+    private Teacher mapToEntity(TeacherDto dto) {
         Teacher teacher = new Teacher();
         if (dto.getId() != null) teacher.setId(dto.getId());
         if (dto.getName() != null) teacher.setName(dto.getName());
@@ -95,14 +99,16 @@ public class TeacherServiceImpl implements TeacherService{
         if (dto.getPhoneNumber() != null) teacher.setPhoneNumber(dto.getPhoneNumber());
         if (dto.getAddress() != null) teacher.setAddress(dto.getAddress());
         if (dto.getDateOfBirth() != null) teacher.setDateOfBirth(dto.getDateOfBirth());
-        if (dto.getSubjectIds() != null) {List<StudentSubject> subjects = dto.getSubjectIds().stream()
-                .map(subjectId -> {
-                    StudentSubject subject = subjectRepository.findById(subjectId).get();
+        if (dto.getSubjectIds() != null) {
+            List<StudentSubject> subjects = dto.getSubjectIds().stream()
+                    .map(subjectId -> {
+                        StudentSubject subject = subjectRepository.findById(subjectId).get();
 //                    subject.setId(subjectId);
-                    return subject;
-                })
-                .toList();
-        teacher.setSubjects(subjects);}
+                        return subject;
+                    })
+                    .toList();
+            teacher.setSubjects(subjects);
+        }
         return teacher;
     }
 

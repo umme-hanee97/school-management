@@ -14,25 +14,25 @@ public class RelationService {
     @Autowired
     private RelationRepository repository;
 
-    public List<RelationshipDto> getAll(){
+    public List<RelationshipDto> getAll() {
         List<Relationship> relationships = repository.findAll(Sort.by("relationship"));
         return relationships.stream().map(section -> mapToDto(section, new RelationshipDto())).toList();
     }
 
-    public RelationshipDto getById(Long id){
+    public RelationshipDto getById(Long id) {
         RelationshipDto dto = new RelationshipDto();
         Relationship relationship = repository.findById(id).get();
         mapToDto(relationship, dto);
         return dto;
     }
 
-    public String saveData(RelationshipDto dto){
+    public String saveData(RelationshipDto dto) {
         Relationship relationship = new Relationship();
         mapToEntity(relationship, dto);
         return repository.save(relationship).getRelationship();
     }
 
-    public String updateData(Long id, RelationshipDto dto){
+    public String updateData(Long id, RelationshipDto dto) {
         Relationship relationship = repository.findById(id).orElseThrow(RuntimeException::new);
         mapToEntity(relationship, dto);
         return repository.save(relationship).getRelationship();

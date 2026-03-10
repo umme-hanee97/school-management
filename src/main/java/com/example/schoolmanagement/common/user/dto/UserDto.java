@@ -1,13 +1,15 @@
-package com.example.schoolmanagement.user.dto;
+package com.example.schoolmanagement.common.user.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-@Setter@RequiredArgsConstructor
+@Setter
+@RequiredArgsConstructor
 public class UserDto {
     private Long id;
     private String name;

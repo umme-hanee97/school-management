@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.role.model;
+package com.example.schoolmanagement.common.role.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

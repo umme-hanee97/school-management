@@ -29,32 +29,31 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+    private UserDetailsServiceImpl service;
+    @Autowired
+    private AuthEntryPoint unauthorizedHandler;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
         return config.getAuthenticationManager();
     }
 
-    @Autowired
-    private UserDetailsServiceImpl service;
-
-    @Autowired
-    private AuthEntryPoint unauthorizedHandler;
-
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter(){
+    public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(service);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
@@ -72,7 +71,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public OpenAPI openAPI(){
+    public OpenAPI openAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("School API").description("School Management API").version("1.0")
@@ -80,7 +79,7 @@ public class WebSecurityConfig {
                         .license(new License().name("License of API").url("API license url")));
     }
 
-    private SecurityScheme createAPIKeyScheme(){
+    private SecurityScheme createAPIKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer");
     }
 

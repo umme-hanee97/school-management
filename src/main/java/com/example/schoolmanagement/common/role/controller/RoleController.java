@@ -1,8 +1,8 @@
-package com.example.schoolmanagement.role.controller;
+package com.example.schoolmanagement.common.role.controller;
 
 
-import com.example.schoolmanagement.role.dto.RolesDto;
-import com.example.schoolmanagement.role.service.RolesService;
+import com.example.schoolmanagement.common.role.dto.RolesDto;
+import com.example.schoolmanagement.common.role.service.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -5,12 +5,12 @@ import com.example.schoolmanagement.common.model.LoginRequest;
 import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.common.security.jwt.JwtUtils;
 import com.example.schoolmanagement.common.security.service.UserDetailsImpl;
-import com.example.schoolmanagement.role.model.Roles;
-import com.example.schoolmanagement.role.repository.RolesRepository;
-import com.example.schoolmanagement.user.dto.UserDto;
-import com.example.schoolmanagement.user.model.User;
-import com.example.schoolmanagement.user.repository.UserRepository;
-import com.example.schoolmanagement.user.service.UserService;
+import com.example.schoolmanagement.common.role.model.Roles;
+import com.example.schoolmanagement.common.role.repository.RolesRepository;
+import com.example.schoolmanagement.common.user.dto.UserDto;
+import com.example.schoolmanagement.common.user.model.User;
+import com.example.schoolmanagement.common.user.repository.UserRepository;
+import com.example.schoolmanagement.common.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -44,12 +44,12 @@ public class AuthController {
     @Autowired
     private RolesRepository rolesRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    private JwtUtils jwtUtils = new JwtUtils();
+    private final JwtUtils jwtUtils = new JwtUtils();
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest request){
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -59,13 +59,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto) {
         MessageResponse messageResponse = new MessageResponse();
-        if (userService.usernameExists(userDto.getName())){
-                messageResponse.setMessage("Username already exists!");
+        if (userService.usernameExists(userDto.getName())) {
+            messageResponse.setMessage("Username already exists!");
             return ResponseEntity.badRequest().body(messageResponse);
         }
-        if (userService.emailExists(userDto.getEmail())){
+        if (userService.emailExists(userDto.getEmail())) {
             messageResponse.setMessage("Email already exists!");
             return ResponseEntity.badRequest().body(messageResponse);
         }
@@ -73,27 +73,31 @@ public class AuthController {
         User user = new User(userDto.getName(), userDto.getEmail(), encoder.encode(userDto.getPassword()));
         Set<String> strRoles = userDto.getRoles();
         List<Roles> roles = rolesRepository.findAllById(strRoles == null ? Collections.EMPTY_LIST : strRoles);
-        if (roles.size() != (strRoles == null ? 0 : strRoles.size())){
+        if (roles.size() != (strRoles == null ? 0 : strRoles.size())) {
             throw new RuntimeException("One of roles not found!");
         }
-        if (strRoles != null){
+        if (strRoles != null) {
             Roles oRoles = rolesRepository.findById("USER").orElseThrow(() -> new RuntimeException("Error: Role is not found!"));
             roles.add(oRoles);
         } else {
             strRoles.forEach(role -> {
-                switch (role){
-                    case "ADMIN": Roles adminRole = rolesRepository.findById("ADMIN").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                    roles.add(adminRole);
-                    break;
-                    case "MODERATOR": Roles moderatorRole = rolesRepository.findById("MODERATOR").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                    roles.add(moderatorRole);
-                    break;
-                    case "STUDENT": Roles studentRole = rolesRepository.findById("STUDENT").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                    roles.add(studentRole);
-                    break;
-                    case "TEACHER": Roles teacherRole = rolesRepository.findById("TEACHER").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                    roles.add(teacherRole);
-                    break;
+                switch (role) {
+                    case "ADMIN":
+                        Roles adminRole = rolesRepository.findById("ADMIN").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(adminRole);
+                        break;
+                    case "MODERATOR":
+                        Roles moderatorRole = rolesRepository.findById("MODERATOR").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(moderatorRole);
+                        break;
+                    case "STUDENT":
+                        Roles studentRole = rolesRepository.findById("STUDENT").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(studentRole);
+                        break;
+                    case "TEACHER":
+                        Roles teacherRole = rolesRepository.findById("TEACHER").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(teacherRole);
+                        break;
                     default:
                         Roles userRole = rolesRepository.findById("USER").orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         roles.add(userRole);
@@ -107,7 +111,7 @@ public class AuthController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser(){
+    public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(new MessageResponse("You've been signed out!"));
     }

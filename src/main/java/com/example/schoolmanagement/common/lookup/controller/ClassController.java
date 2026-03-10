@@ -19,19 +19,19 @@ public class ClassController {
     private ClassService service;
 
     @GetMapping
-    public ResponseEntity<?> getAllData(){
+    public ResponseEntity<?> getAllData() {
         List<ClassDto> classes = service.getAll();
         return ResponseEntity.ok(classes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         ClassDto classDto = service.getById(id);
         return ResponseEntity.ok(classDto);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody ClassDto classDto){
+    public ResponseEntity<?> saveData(@RequestBody ClassDto classDto) {
         try {
             service.saveData(classDto);
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class ClassController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid ClassDto classDto){
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid ClassDto classDto) {
         service.updateData(id, classDto);
         return ResponseEntity.ok().build();
     }

@@ -1,6 +1,6 @@
 package com.example.schoolmanagement.common.security.service;
 
-import com.example.schoolmanagement.user.model.User;
+import com.example.schoolmanagement.common.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserDetailsImpl build(User user){
+    public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return new UserDetailsImpl(user.getId(), user.getName(), user.getEmail(), user.getPassword(), authorities);
     }
@@ -70,10 +70,10 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
+        if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()){
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         UserDetailsImpl userDetails = (UserDetailsImpl) obj;

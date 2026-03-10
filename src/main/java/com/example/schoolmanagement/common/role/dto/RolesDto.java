@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.role.dto;
+package com.example.schoolmanagement.common.role.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

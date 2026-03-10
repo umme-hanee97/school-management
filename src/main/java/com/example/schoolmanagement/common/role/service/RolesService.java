@@ -1,8 +1,8 @@
-package com.example.schoolmanagement.role.service;
+package com.example.schoolmanagement.common.role.service;
 
-import com.example.schoolmanagement.role.dto.RolesDto;
-import com.example.schoolmanagement.role.model.Roles;
-import com.example.schoolmanagement.role.repository.RolesRepository;
+import com.example.schoolmanagement.common.role.dto.RolesDto;
+import com.example.schoolmanagement.common.role.model.Roles;
+import com.example.schoolmanagement.common.role.repository.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

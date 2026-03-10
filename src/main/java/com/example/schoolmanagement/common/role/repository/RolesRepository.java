@@ -1,6 +1,6 @@
-package com.example.schoolmanagement.role.repository;
+package com.example.schoolmanagement.common.role.repository;
 
-import com.example.schoolmanagement.role.model.Roles;
+import com.example.schoolmanagement.common.role.model.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

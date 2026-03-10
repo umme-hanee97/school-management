@@ -19,19 +19,19 @@ public class SectionController {
     private SectionService service;
 
     @GetMapping
-    public ResponseEntity<?> getAllData(){
+    public ResponseEntity<?> getAllData() {
         List<SectionDto> sections = service.getAll();
         return ResponseEntity.ok(sections);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         SectionDto sectionDto = service.getById(id);
         return ResponseEntity.ok(sectionDto);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody SectionDto sectionDto){
+    public ResponseEntity<?> saveData(@RequestBody SectionDto sectionDto) {
         try {
             service.saveData(sectionDto);
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class SectionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SectionDto sectionDto){
+    public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody @Valid SectionDto sectionDto) {
         service.updateData(id, sectionDto);
         return ResponseEntity.ok().build();
     }

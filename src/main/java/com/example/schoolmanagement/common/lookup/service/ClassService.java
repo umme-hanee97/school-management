@@ -6,32 +6,33 @@ import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class ClassService {
     @Autowired
     private ClassRepository repository;
-    
-    public List<ClassDto> getAll(){
+
+    public List<ClassDto> getAll() {
         List<StudentClass> classes = repository.findAll(Sort.by("id"));
         return classes.stream().map(studentClass -> mapToDto(studentClass, new ClassDto())).toList();
     }
-    
-    public ClassDto getById(Long id){
+
+    public ClassDto getById(Long id) {
         ClassDto dto = new ClassDto();
         StudentClass studentClass = repository.findById(id).get();
         mapToDto(studentClass, dto);
         return dto;
     }
-    
-    public String saveData(ClassDto dto){
+
+    public String saveData(ClassDto dto) {
         StudentClass studentClass = new StudentClass();
         mapToEntity(studentClass, dto);
         return repository.save(studentClass).getClassName();
     }
 
-    public String updateData(Long id, ClassDto dto){
+    public String updateData(Long id, ClassDto dto) {
         StudentClass studentClass = repository.findById(id).orElseThrow(RuntimeException::new);
         mapToEntity(studentClass, dto);
         return repository.save(studentClass).getClassName();

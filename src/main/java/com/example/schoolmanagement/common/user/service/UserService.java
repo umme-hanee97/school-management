@@ -1,18 +1,18 @@
-package com.example.schoolmanagement.user.service;
+package com.example.schoolmanagement.common.user.service;
 
-import com.example.schoolmanagement.role.model.Roles;
-import com.example.schoolmanagement.role.repository.RolesRepository;
-import com.example.schoolmanagement.user.dto.UserDto;
-import com.example.schoolmanagement.user.model.User;
-import com.example.schoolmanagement.user.repository.UserRepository;
+import com.example.schoolmanagement.common.role.model.Roles;
+import com.example.schoolmanagement.common.role.repository.RolesRepository;
+import com.example.schoolmanagement.common.user.dto.UserDto;
+import com.example.schoolmanagement.common.user.model.User;
+import com.example.schoolmanagement.common.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,52 +24,52 @@ public class UserService {
     @Autowired
     private RolesRepository rolesRepository;
 
-    private BCryptPasswordEncoder encoder(){
+    private BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
-    public List<UserDto> getAll(){
+    public List<UserDto> getAll() {
         List<User> users = userRepository.findAll(Sort.by("name"));
         return users.stream().map(user -> mapToDto(user, new UserDto())).toList();
     }
 
-    public UserDto getById(Long id){
+    public UserDto getById(Long id) {
         UserDto userDto = new UserDto();
         User user = userRepository.findById(id).get();
         mapToDto(user, userDto);
         return userDto;
     }
 
-    public UserDto get(String username){
+    public UserDto get(String username) {
         Optional<User> user = userRepository.findByName(username);
         return user.map(oUser -> mapToDto(oUser, new UserDto())).orElseThrow(RuntimeException::new);
     }
 
-    public String saveData(UserDto userDto){
+    public String saveData(UserDto userDto) {
         User user = new User();
         mapToEntity(user, userDto);
         return userRepository.save(user).getName();
     }
 
-    public String updateData(String username, UserDto userDto){
+    public String updateData(String username, UserDto userDto) {
         User user = userRepository.findByName(username).orElseThrow(RuntimeException::new);
         mapToEntity(user, userDto);
         return userRepository.save(user).getName();
     }
 
-    public void delete(String username){
+    public void delete(String username) {
         userRepository.deleteByName(username);
     }
 
-    public boolean usernameExists(String username){
+    public boolean usernameExists(String username) {
         return userRepository.existsByNameIgnoreCase(username);
     }
 
-    public boolean emailExists(String email){
+    public boolean emailExists(String email) {
         return userRepository.existsByEmailIgnoreCase(email);
     }
 
-    private UserDto mapToDto(User user, UserDto dto){
+    private UserDto mapToDto(User user, UserDto dto) {
         dto.setName(user.getName());
         dto.setPassword(user.getPassword());
         dto.setEmail(user.getEmail());
@@ -77,13 +77,13 @@ public class UserService {
         return dto;
     }
 
-    private User mapToEntity(User user, UserDto dto){
+    private User mapToEntity(User user, UserDto dto) {
         if (dto.getName() != null) user.setName(dto.getName());
         if (dto.getPassword() != null) user.setPassword(encoder().encode(dto.getPassword()));
         if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         user.setEnabled(true);
         List<Roles> roles = rolesRepository.findAllById(dto.getRoles() == null ? Collections.EMPTY_LIST : dto.getRoles());
-        if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())){
+        if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())) {
             throw new RuntimeException("One of roles not found!");
         }
         user.setRoles(roles.stream().collect(Collectors.toSet()));
