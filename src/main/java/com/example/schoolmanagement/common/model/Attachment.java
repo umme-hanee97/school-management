@@ -20,21 +20,21 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "student_id")
+    @JoinColumn(name = "student_id")
     private Student studentId;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "teacher_id")
+    @JoinColumn(name = "teacher_id")
     private Teacher teacherId;
     @Column(nullable = false, name = "file_name")
     @Size(min = 1, max = 255, message = "File name must be between 1 and 255 characters")
     private String fileName;
-    @Column(nullable = false, name = "file_type")
-    @Size(min = 1, max = 50, message = "File type must be between 1 and 50 characters")
-    private String fileType;
+//    @Column(nullable = false, name = "file_type")
+//    @Size(min = 1, max = 50, message = "File type must be between 1 and 50 characters")
+//    private String fileType;
     @Column(nullable = false, name = "file_data", columnDefinition = "TEXT")
     @Size(min = 1, message = "File data must not be empty")
-    private String fileData;
-    @Column(nullable = false, name = "file_size")
-    @Size(min = 1, message = "File size must be greater than 0")
-    private int fileSize;
+    private String fileB64;
+//    @Column(nullable = false, name = "file_size")
+//    @Size(min = 1, message = "File size must be greater than 0")
+//    private int fileSize;
 }

@@ -2,6 +2,8 @@ package com.example.schoolmanagement.student.service;
 
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
+import com.example.schoolmanagement.common.model.Attachment;
+import com.example.schoolmanagement.common.repository.AttachmentRepository;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
@@ -15,6 +17,8 @@ import java.util.List;
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
+    @Autowired
+    private AttachmentRepository attachmentRepository;
     @Autowired
     private TeacherRepository repository;
     @Autowired
@@ -36,7 +40,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacher != null ? mapToDto(teacher) : new TeacherDto();
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public String saveData(TeacherDto dto) {
         Teacher teacher = repository.findByEmail(dto.getEmail());
@@ -48,7 +52,14 @@ public class TeacherServiceImpl implements TeacherService {
             dto.setId(teacher.getId());
         }
         teacher = mapToEntity(dto);
-        return repository.save(teacher).getName();
+        Teacher oTeacher = repository.save(teacher);
+        Attachment attachment = new Attachment();
+        attachment.setFileName(dto.getFileName());
+        attachment.setFileB64(dto.getFileB64());
+        attachment.setTeacherId(oTeacher);
+//        oTeacher.setAttachments(List.of(attachment));
+        attachmentRepository.save(attachment);
+        return oTeacher.getName();
     }
 
     @Override

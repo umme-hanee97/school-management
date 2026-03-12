@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.student.dto;
 
+import com.example.schoolmanagement.common.model.Attachment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ public class TeacherDto {
     private String dateOfBirth;
     private List<Long> subjectIds;
     private List<String> subjectNames;
-    private List<Long> attachments;
+    private String fileB64;
+    private String fileName;
 //    private boolean isActive = true;
 
 }
