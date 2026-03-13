@@ -1,6 +1,5 @@
 package com.example.schoolmanagement.student.model;
 
-import com.example.schoolmanagement.common.model.Attachment;
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -40,8 +39,12 @@ public class Teacher {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "teacher_subjects", joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<StudentSubject> subjects;
-    @OneToMany(mappedBy = "teacherId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attachment> attachments;
+    @Column(name = "file_b64", columnDefinition = "TEXT")
+    @Size(min = 1, message = "File data must not be empty")
+    private String fileB64;
+    @Column(name = "file_name")
+    @Size(min = 1, max = 255, message = "File name must be between 1 and 255 characters")
+    private String fileName;
     @Column(name = "is_active")
     private boolean isActive = true;
 }

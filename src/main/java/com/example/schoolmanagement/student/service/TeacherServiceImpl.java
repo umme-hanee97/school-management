@@ -2,13 +2,10 @@ package com.example.schoolmanagement.student.service;
 
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
-import com.example.schoolmanagement.common.model.Attachment;
-import com.example.schoolmanagement.common.repository.AttachmentRepository;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
 import com.example.schoolmanagement.common.user.service.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +14,6 @@ import java.util.List;
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
-    @Autowired
-    private AttachmentRepository attachmentRepository;
     @Autowired
     private TeacherRepository repository;
     @Autowired
@@ -52,14 +47,13 @@ public class TeacherServiceImpl implements TeacherService {
             dto.setId(teacher.getId());
         }
         teacher = mapToEntity(dto);
-        Teacher oTeacher = repository.save(teacher);
-        Attachment attachment = new Attachment();
-        attachment.setFileName(dto.getFileName());
-        attachment.setFileB64(dto.getFileB64());
-        attachment.setTeacherId(oTeacher);
-//        oTeacher.setAttachments(List.of(attachment));
-        attachmentRepository.save(attachment);
-        return oTeacher.getName();
+//        Teacher oTeacher = repository.save(teacher);
+//        Attachment attachment = new Attachment();
+//        attachment.setFileName(dto.getFileName());
+//        attachment.setFileB64(dto.getFileB64());
+//        attachment.setTeacherId(oTeacher);
+//        attachmentRepository.save(attachment);
+        return repository.save(teacher).getName();
     }
 
     @Override
@@ -99,6 +93,8 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             dto.setSubjectNames(subjects);
         }
+        if (teacher.getFileB64() != null) dto.setFileB64(teacher.getFileB64());
+        if (teacher.getFileName() != null) dto.setFileName(teacher.getFileName());
         return dto;
     }
 
@@ -120,6 +116,8 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             teacher.setSubjects(subjects);
         }
+        if (dto.getFileB64() != null) teacher.setFileB64(dto.getFileB64());
+        if (dto.getFileName() != null) teacher.setFileName(dto.getFileName());
         return teacher;
     }
 

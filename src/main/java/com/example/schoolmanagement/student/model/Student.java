@@ -1,6 +1,5 @@
 package com.example.schoolmanagement.student.model;
 
-import com.example.schoolmanagement.common.model.Attachment;
 import com.example.schoolmanagement.common.lookup.model.StudentClass;
 import com.example.schoolmanagement.common.lookup.model.StudentSection;
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
@@ -57,8 +56,12 @@ public class Student {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "student_class_subject", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<StudentSubject> subjects;
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attachment> attachments;
+    @Column(name = "file_b64", columnDefinition = "TEXT")
+    @Size(min = 1, message = "File data must not be empty")
+    private String fileB64;
+    @Column(name = "file_name")
+    @Size(min = 1, max = 255, message = "File name must be between 1 and 255 characters")
+    private String fileName;
     @Column(nullable = false, name = "roll_number", unique = true)
     @Size(min = 1, max = 20, message = "Roll number must be between 1 and 20 characters")
     private int rollNumber;

@@ -1,6 +1,5 @@
 package com.example.schoolmanagement.student.dto;
 
-import com.example.schoolmanagement.common.model.Attachment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
