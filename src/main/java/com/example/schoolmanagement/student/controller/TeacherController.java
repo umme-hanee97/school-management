@@ -1,8 +1,10 @@
 package com.example.schoolmanagement.student.controller;
 
+import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +32,10 @@ public class TeacherController {
 
     @PostMapping
     public ResponseEntity<?> saveData(@RequestBody TeacherDto dto) {
+        MessageResponse messageResponse = new MessageResponse();
         String name = service.saveData(dto);
-        return ResponseEntity.ok(name);
+        messageResponse.setMessage("User Registered Successfully!");
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
