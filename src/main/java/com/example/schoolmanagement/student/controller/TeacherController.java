@@ -15,8 +15,12 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class TeacherController {
 
-    @Autowired
-    private TeacherService service;
+
+    private final TeacherService service;
+
+    private TeacherController(TeacherService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {

@@ -6,7 +6,6 @@ import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
 import com.example.schoolmanagement.common.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +13,20 @@ import java.util.List;
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
-    @Autowired
+
     private TeacherRepository repository;
-    @Autowired
+
     private SubjectRepository subjectRepository;
-    @Autowired
+
     private UserService userService;
+
+    private TeacherServiceImpl(TeacherRepository repository,
+                               SubjectRepository subjectRepository,
+                               UserService userService) {
+        this.repository = repository;
+        this.subjectRepository = subjectRepository;
+        this.userService = userService;
+    }
 
     @Override
     public List<TeacherDto> getAll() {
@@ -35,7 +42,6 @@ public class TeacherServiceImpl implements TeacherService {
         return teacher != null ? mapToDto(teacher) : new TeacherDto();
     }
 
-//    @Transactional
     @Override
     public String saveData(TeacherDto dto) {
         Teacher teacher = repository.findByEmail(dto.getEmail());
@@ -47,12 +53,6 @@ public class TeacherServiceImpl implements TeacherService {
             dto.setId(teacher.getId());
         }
         teacher = mapToEntity(dto);
-//        Teacher oTeacher = repository.save(teacher);
-//        Attachment attachment = new Attachment();
-//        attachment.setFileName(dto.getFileName());
-//        attachment.setFileB64(dto.getFileB64());
-//        attachment.setTeacherId(oTeacher);
-//        attachmentRepository.save(attachment);
         return repository.save(teacher).getName();
     }
 

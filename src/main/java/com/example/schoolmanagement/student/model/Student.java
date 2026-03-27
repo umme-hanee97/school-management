@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter
@@ -48,11 +47,11 @@ public class Student {
     @Size(min = 10, max = 10, message = "Date of Birth must be in the format YYYY-MM-DD")
     private String dateOfBirth;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private StudentClass classId;
+    @JoinColumn(name = "student_class")
+    private StudentClass studentClass;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "section_id")
-    private StudentSection sectionId;
+    @JoinColumn(name = "section")
+    private StudentSection section;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "student_class_subject", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<StudentSubject> subjects;
@@ -64,10 +63,10 @@ public class Student {
     private String fileName;
     @Column(nullable = false, name = "roll_number", unique = true)
     @Size(min = 1, max = 20, message = "Roll number must be between 1 and 20 characters")
-    private int rollNumber;
+    private Integer rollNumber;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacherId;
+    @JoinColumn(name = "teacher")
+    private Teacher teacher;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "emergency_contacts", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "emergency_contact_id"))
     private List<EmergencyContact> emergencyContacts;
