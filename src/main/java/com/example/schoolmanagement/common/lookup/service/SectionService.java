@@ -40,11 +40,13 @@ public class SectionService {
     }
 
     private StudentSection mapToEntity(StudentSection section, SectionDto dto) {
+        if (dto.getId() != null) section.setId(dto.getId());
         if (dto.getSectionName() != null) section.setSectionName(dto.getSectionName());
         return section;
     }
 
     private SectionDto mapToDto(StudentSection section, SectionDto sectionDto) {
+        if (section.getId() != null) sectionDto.setId(section.getId());
         if (section.getSectionName() != null) sectionDto.setSectionName(section.getSectionName());
         return sectionDto;
     }

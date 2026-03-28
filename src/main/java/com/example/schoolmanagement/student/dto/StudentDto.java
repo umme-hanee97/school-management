@@ -18,7 +18,7 @@ public class StudentDto {
     private String motherName;
     private String email;
     private String phoneNumber;
-    private boolean isActive = true;
+//    private boolean isActive = true;
     private String address;
     private String dateOfBirth;
     private Long classId;
