@@ -14,11 +14,11 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 
 
-    private TeacherRepository repository;
+    private final TeacherRepository repository;
 
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
 
-    private UserService userService;
+    private final UserService userService;
 
     private TeacherServiceImpl(TeacherRepository repository,
                                SubjectRepository subjectRepository,
@@ -40,6 +40,16 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherDto getById(Long id) {
         Teacher teacher = repository.findById(id).orElseThrow(RuntimeException::new);
         return teacher != null ? mapToDto(teacher) : new TeacherDto();
+    }
+
+    @Override
+    public TeacherDto getByEmail(String email) {
+        Teacher teacher = repository.findByEmail(email);
+        if (teacher != null) {
+            return mapToDto(teacher);
+        } else {
+            throw new RuntimeException("Teacher not found with email: " + email);
+        }
     }
 
     @Override
@@ -92,6 +102,12 @@ public class TeacherServiceImpl implements TeacherService {
                     .map(subject -> subject.getSubjectName())
                     .toList();
             dto.setSubjectNames(subjects);
+        }
+        if (teacher.getSubjects() != null) {
+            List<Long> subjects = teacher.getSubjects().stream()
+                    .map(subject -> subject.getId())
+                    .toList();
+            dto.setSubjectIds(subjects);
         }
         if (teacher.getFileB64() != null) dto.setFileB64(teacher.getFileB64());
         if (teacher.getFileName() != null) dto.setFileName(teacher.getFileName());

@@ -34,6 +34,12 @@ public class TeacherController {
         return ResponseEntity.ok(teacher);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+        TeacherDto teacher = service.getByEmail(email);
+        return ResponseEntity.ok(teacher);
+    }
+
     @PostMapping
     public ResponseEntity<?> saveData(@RequestBody TeacherDto dto) {
         MessageResponse messageResponse = new MessageResponse();

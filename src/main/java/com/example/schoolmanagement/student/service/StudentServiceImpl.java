@@ -62,6 +62,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public StudentDto getByEmail(String email) {
+        Student student = repository.findByEmail(email);
+        if (student != null) {
+            return mapToDto(student);
+        } else {
+            throw new RuntimeException("Student not found with email: " + email);
+        }
+    }
+
+    @Override
     public String saveData(StudentDto dto) {
         Student student = repository.findByEmail(dto.getEmail());
         Boolean hasUser = userService.emailExists(dto.getEmail());

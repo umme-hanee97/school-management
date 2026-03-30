@@ -30,6 +30,12 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+        StudentDto student = service.getByEmail(email);
+        return ResponseEntity.ok(student);
+    }
+
     @PostMapping
     public ResponseEntity<?> saveData(@RequestBody StudentDto dto) {
         String name = service.saveData(dto);

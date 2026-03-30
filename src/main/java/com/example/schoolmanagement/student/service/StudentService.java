@@ -8,6 +8,8 @@ public interface StudentService {
 
     StudentDto getById(Long id);
 
+    StudentDto getByEmail(String email);
+
     String saveData(StudentDto dto);
 
     String updateData(Long id, StudentDto dto);
