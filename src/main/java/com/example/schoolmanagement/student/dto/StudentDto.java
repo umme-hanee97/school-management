@@ -22,6 +22,7 @@ public class StudentDto {
     private String address;
     private String dateOfBirth;
     private Long classId;
+    private String className;
     private Long sectionId;
     private List<Long> subjects;
     private Integer rollNumber;

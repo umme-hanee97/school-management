@@ -121,6 +121,7 @@ public class StudentServiceImpl implements StudentService {
         if (student.getAddress() != null) dto.setAddress(student.getAddress());
         if (student.getDateOfBirth() != null) dto.setDateOfBirth(student.getDateOfBirth());
         if (student.getStudentClass() != null) dto.setClassId(student.getStudentClass().getId());
+        if (student.getStudentClass() != null) dto.setClassName(student.getStudentClass().getClassName());
         if (student.getSection() != null) dto.setSectionId(student.getSection().getId());
         if (student.getSubjects() != null) {
             List<Long> subjects = student.getSubjects().stream()
