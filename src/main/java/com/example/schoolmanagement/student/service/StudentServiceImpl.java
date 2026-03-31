@@ -4,6 +4,9 @@ import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
 import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
+import com.example.schoolmanagement.common.model.ErrorHandler;
+import com.example.schoolmanagement.common.model.MessageResponse;
+import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.common.user.service.UserService;
 import com.example.schoolmanagement.student.dto.StudentDto;
 import com.example.schoolmanagement.student.model.EmergencyContact;
@@ -72,18 +75,38 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public String saveData(StudentDto dto) {
-        Student student = repository.findByEmail(dto.getEmail());
+    public StudentDto saveData(StudentDto dto) throws ErrorHandler {
+        UserDto userDto = new UserDto(dto.getName(), dto.getEmail(), "test@1234");
+        try{
+            if (userService.emailExists(dto.getEmail())) {
+                throw new ErrorHandler("User already exists with email: " + dto.getEmail());
+            }
+            userService.saveData(userDto);
+            Student student = mapToEntity(dto);
+            repository.save(student);
+        } catch (Exception e){
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
+        return dto;
+    }
+
+    @Override
+    public StudentDto editProfileData(StudentDto dto) throws ErrorHandler {
+        Student student = mapToEntity(getByEmail(dto.getEmail()));
         Boolean hasUser = userService.emailExists(dto.getEmail());
-        if (!hasUser) {
-            throw new RuntimeException("User not found with email: " + dto.getEmail());
+        try {
+            if (!hasUser) {
+                throw new ErrorHandler("User not found with email: " + dto.getEmail());
+            }
+            if (student != null) {
+                dto.setId(student.getId());
+            }
+            student = mapToEntity(dto);
+            repository.save(student);
+        } catch (Exception e){
+            throw new ErrorHandler("Error Occurred!!", e);
         }
-        if (student != null) {
-            dto.setId(student.getId());
-        }
-        student = mapToEntity(dto);
-        repository.save(student);
-        return student.getName();
+        return dto;
     }
 
     @Override

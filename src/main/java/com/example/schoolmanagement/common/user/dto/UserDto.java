@@ -16,4 +16,10 @@ public class UserDto {
     private String email;
     private String password;
     private Set<String> roles = new HashSet<>();
+
+    public UserDto(String name, String email, String s) {
+        this.name = name;
+        this.email = email;
+        this.password = s;
+    }
 }
