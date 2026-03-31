@@ -22,6 +22,5 @@ public class TeacherDto {
     private List<String> subjectNames;
     private String fileB64;
     private String fileName;
-//    private boolean isActive = true;
 
 }

@@ -5,7 +5,6 @@ import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
 import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.common.model.ErrorHandler;
-import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.common.user.service.UserService;
 import com.example.schoolmanagement.student.dto.StudentDto;
@@ -14,10 +13,13 @@ import com.example.schoolmanagement.student.model.Student;
 import com.example.schoolmanagement.student.repository.EmergencyContactRepository;
 import com.example.schoolmanagement.student.repository.StudentRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
 
@@ -33,23 +35,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final EmergencyContactRepository emergencyContactRepository;
 
-    private UserService userService;
-
-    private StudentServiceImpl(StudentRepository repository,
-                               SectionRepository sectionRepository,
-                               SubjectRepository subjectRepository,
-                               ClassRepository classRepository,
-                               TeacherRepository teacherRepository,
-                               EmergencyContactRepository emergencyContactRepository,
-                               UserService userService) {
-        this.repository = repository;
-        this.sectionRepository = sectionRepository;
-        this.subjectRepository = subjectRepository;
-        this.classRepository = classRepository;
-        this.teacherRepository = teacherRepository;
-        this.emergencyContactRepository = emergencyContactRepository;
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @Override
     public List<StudentDto> getAll() {
@@ -75,16 +61,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public StudentDto saveData(StudentDto dto) throws ErrorHandler {
         UserDto userDto = new UserDto(dto.getName(), dto.getEmail(), "test@1234");
-        try{
-            if (userService.emailExists(dto.getEmail())) {
-                throw new ErrorHandler("User already exists with email: " + dto.getEmail());
-            }
+        if (userService.emailExists(dto.getEmail())) {
+            throw new ErrorHandler("User already exists with email: " + dto.getEmail());
+        }
+        try {
             userService.saveData(userDto);
             Student student = mapToEntity(dto);
             repository.save(student);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorHandler("Error Occurred!!", e);
         }
         return dto;
@@ -160,7 +147,7 @@ public class StudentServiceImpl implements StudentService {
                     .toList();
             dto.setEmergencyContacts(emergencyContacts);
         }
-        if (student.getFileB64() != null) dto.setFileB64(student.getFileB64());
+        if (student.getFileB64() != null) dto.setFileB64(String.valueOf(student.getFileB64()));
         if (student.getFileName() != null) dto.setFileName(student.getFileName());
         return dto;
     }
@@ -194,7 +181,7 @@ public class StudentServiceImpl implements StudentService {
                     .toList();
             student.setEmergencyContacts(emergencyContacts);
         }
-        if (dto.getFileB64() != null) student.setFileB64(dto.getFileB64());
+        if (dto.getFileB64() != null) student.setFileB64(dto.getFileB64().getBytes());
         if (dto.getFileName() != null) student.setFileName(dto.getFileName());
         return student;
     }

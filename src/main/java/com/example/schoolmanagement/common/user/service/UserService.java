@@ -5,6 +5,7 @@ import com.example.schoolmanagement.common.role.repository.RolesRepository;
 import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.common.user.model.User;
 import com.example.schoolmanagement.common.user.repository.UserRepository;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@NoArgsConstructor(force = true)
 public class UserService {
 
     @Autowired

@@ -38,7 +38,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveOrUpdateData(@RequestBody StudentDto dto) throws ErrorHandler {
+    public ResponseEntity<?> saveOrUpdateData(@RequestBody StudentDto dto) {
         try {
             service.saveData(dto);
             return ResponseEntity.ok(HttpStatus.CREATED);
@@ -48,7 +48,7 @@ public class StudentController {
     }
 
     @PostMapping("editStudentProfile")
-    public ResponseEntity<?> editProfileData(@RequestBody StudentDto dto) throws ErrorHandler {
+    public ResponseEntity<?> editProfileData(@RequestBody StudentDto dto) {
         try {
             StudentDto student = service.editProfileData(dto);
             return ResponseEntity.ok(HttpStatus.CREATED);

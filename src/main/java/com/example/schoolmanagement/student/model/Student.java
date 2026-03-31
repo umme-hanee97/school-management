@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
 
 @Getter
@@ -55,9 +56,8 @@ public class Student {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "student_class_subject", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<StudentSubject> subjects;
-    @Column(name = "file_b64", columnDefinition = "TEXT")
-    @Size(min = 1, message = "File data must not be empty")
-    private String fileB64;
+    @Column(name = "file_b64", columnDefinition = "mediumblob")
+    private byte[] fileB64;
     @Column(name = "file_name")
     @Size(min = 1, max = 255, message = "File name must be between 1 and 255 characters")
     private String fileName;
