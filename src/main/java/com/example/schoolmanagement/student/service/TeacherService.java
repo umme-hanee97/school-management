@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.student.service;
 
+import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import java.util.List;
 
@@ -10,7 +11,9 @@ public interface TeacherService {
 
     TeacherDto getByEmail(String email);
 
-    String saveData(TeacherDto dto);
+    TeacherDto saveData(TeacherDto dto) throws ErrorHandler;
+
+    TeacherDto editProfileData(TeacherDto dto) throws ErrorHandler;
 
     String updateData(Long id, TeacherDto dto);
 

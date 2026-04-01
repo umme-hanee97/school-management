@@ -2,15 +2,21 @@ package com.example.schoolmanagement.student.service;
 
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
+import com.example.schoolmanagement.common.model.ErrorHandler;
+import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.model.Teacher;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
 import com.example.schoolmanagement.common.user.service.UserService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
 
@@ -19,14 +25,6 @@ public class TeacherServiceImpl implements TeacherService {
     private final SubjectRepository subjectRepository;
 
     private final UserService userService;
-
-    private TeacherServiceImpl(TeacherRepository repository,
-                               SubjectRepository subjectRepository,
-                               UserService userService) {
-        this.repository = repository;
-        this.subjectRepository = subjectRepository;
-        this.userService = userService;
-    }
 
     @Override
     public List<TeacherDto> getAll() {
@@ -53,17 +51,42 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public String saveData(TeacherDto dto) {
+    @Transactional(rollbackOn = ErrorHandler.class)
+    public TeacherDto saveData(TeacherDto dto) throws ErrorHandler {
+        UserDto userDto = new UserDto(dto.getName(), dto.getEmail(), "test@1234", Set.of("TEACHER"));
+        if (userService.usernameExists(dto.getName())) {
+            throw new ErrorHandler("User already exists with username: " + dto.getName());
+        }
+        if (userService.emailExists(dto.getEmail())) {
+            throw new ErrorHandler("User already exists with email: " + dto.getEmail());
+        }
+        try{
+            userService.saveData(userDto);
+            Teacher teacher = mapToEntity(dto);
+            repository.save(teacher);
+            return dto;
+        } catch (Exception e) {
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
+    }
+
+    @Override
+    public TeacherDto editProfileData(TeacherDto dto) throws ErrorHandler {
         Teacher teacher = repository.findByEmail(dto.getEmail());
         Boolean hasUser = userService.emailExists(dto.getEmail());
+        try{
         if (!hasUser) {
-            throw new RuntimeException("User not found with email: " + dto.getEmail());
+            throw new ErrorHandler("User not found with email: " + dto.getEmail());
         }
         if (teacher != null) {
             dto.setId(teacher.getId());
         }
         teacher = mapToEntity(dto);
-        return repository.save(teacher).getName();
+        repository.save(teacher);
+        return dto;
+        } catch (Exception e){
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
     }
 
     @Override
@@ -109,7 +132,7 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             dto.setSubjectIds(subjects);
         }
-        if (teacher.getFileB64() != null) dto.setFileB64(teacher.getFileB64());
+        if (teacher.getFileB64() != null) dto.setFileB64(String.valueOf(teacher.getFileB64()));
         if (teacher.getFileName() != null) dto.setFileName(teacher.getFileName());
         return dto;
     }
@@ -132,7 +155,7 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             teacher.setSubjects(subjects);
         }
-        if (dto.getFileB64() != null) teacher.setFileB64(dto.getFileB64());
+        if (dto.getFileB64() != null) teacher.setFileB64(dto.getFileB64().getBytes());
         if (dto.getFileName() != null) teacher.setFileName(dto.getFileName());
         return teacher;
     }

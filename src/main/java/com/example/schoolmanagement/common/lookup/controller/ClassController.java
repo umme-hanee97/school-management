@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.common.lookup.controller;
 
+import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
 import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.common.lookup.dto.ClassDto;
 import com.example.schoolmanagement.common.lookup.service.ClassService;
@@ -17,6 +18,9 @@ public class ClassController {
 
     @Autowired
     private ClassService service;
+
+    @Autowired
+    private ClassRepository repository;
 
     @GetMapping
     public ResponseEntity<?> getAllData() {

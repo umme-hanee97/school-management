@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.student.controller;
 
+import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.student.dto.TeacherDto;
 import com.example.schoolmanagement.student.service.TeacherService;
@@ -41,11 +42,23 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveData(@RequestBody TeacherDto dto) {
-        MessageResponse messageResponse = new MessageResponse();
-        String name = service.saveData(dto);
-        messageResponse.setMessage("User Registered Successfully!");
-        return ResponseEntity.ok(HttpStatus.CREATED);
+    public ResponseEntity<?> saveOrUpdateData(@RequestBody TeacherDto dto) {
+        try {
+            service.saveData(dto);
+            return ResponseEntity.ok(HttpStatus.CREATED);
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
+    }
+
+    @PostMapping("/editTeacherProfile")
+    public ResponseEntity<?> editTeacherProfile(@RequestBody TeacherDto dto) {
+        try {
+            service.editProfileData(dto);
+            return ResponseEntity.ok(HttpStatus.CREATED);
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
     @PutMapping("/{id}")

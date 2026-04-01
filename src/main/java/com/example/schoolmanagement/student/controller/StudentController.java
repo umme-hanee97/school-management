@@ -50,7 +50,7 @@ public class StudentController {
     @PostMapping("editStudentProfile")
     public ResponseEntity<?> editProfileData(@RequestBody StudentDto dto) {
         try {
-            StudentDto student = service.editProfileData(dto);
+            service.editProfileData(dto);
             return ResponseEntity.ok(HttpStatus.CREATED);
         } catch (ErrorHandler e) {
             return ResponseEntity.badRequest().body(e.getCause());

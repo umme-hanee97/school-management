@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +64,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StudentDto saveData(StudentDto dto) throws ErrorHandler {
-        UserDto userDto = new UserDto(dto.getName(), dto.getEmail(), "test@1234");
+        UserDto userDto = new UserDto(dto.getName(), dto.getEmail(), "test@1234", Set.of("STUDENT"));
+        if (userService.usernameExists(dto.getName())) {
+            throw new ErrorHandler("User already exists with username: " + dto.getName());
+        }
         if (userService.emailExists(dto.getEmail())) {
             throw new ErrorHandler("User already exists with email: " + dto.getEmail());
         }
@@ -71,10 +75,10 @@ public class StudentServiceImpl implements StudentService {
             userService.saveData(userDto);
             Student student = mapToEntity(dto);
             repository.save(student);
+            return dto;
         } catch (Exception e) {
             throw new ErrorHandler("Error Occurred!!", e);
         }
-        return dto;
     }
 
     @Override
@@ -90,10 +94,10 @@ public class StudentServiceImpl implements StudentService {
             }
             student = mapToEntity(dto);
             repository.save(student);
+            return dto;
         } catch (Exception e){
             throw new ErrorHandler("Error Occurred!!", e);
         }
-        return dto;
     }
 
     @Override

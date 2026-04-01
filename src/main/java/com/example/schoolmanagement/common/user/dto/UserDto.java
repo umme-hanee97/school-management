@@ -17,9 +17,10 @@ public class UserDto {
     private String password;
     private Set<String> roles = new HashSet<>();
 
-    public UserDto(String name, String email, String s) {
+    public <E> UserDto(String name, String email, String s, Set<E> student) {
         this.name = name;
         this.email = email;
         this.password = s;
+        this.roles = student.stream().map(Object::toString).collect(java.util.stream.Collectors.toSet());
     }
 }
