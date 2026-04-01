@@ -13,30 +13,44 @@ import com.example.schoolmanagement.student.model.Student;
 import com.example.schoolmanagement.student.repository.EmergencyContactRepository;
 import com.example.schoolmanagement.student.repository.StudentRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
+    private StudentRepository repository;
 
-    private final StudentRepository repository;
+    private SectionRepository sectionRepository;
 
-    private final SectionRepository sectionRepository;
+    private SubjectRepository subjectRepository;
 
-    private final SubjectRepository subjectRepository;
+    private ClassRepository classRepository;
 
-    private final ClassRepository classRepository;
+    private TeacherRepository teacherRepository;
 
-    private final TeacherRepository teacherRepository;
+    private EmergencyContactRepository emergencyContactRepository;
 
-    private final EmergencyContactRepository emergencyContactRepository;
+    private UserService userService;
 
-    private final UserService userService;
+    public StudentServiceImpl(StudentRepository repository,
+                              SectionRepository sectionRepository,
+                              SubjectRepository subjectRepository,
+                              ClassRepository classRepository,
+                              TeacherRepository teacherRepository,
+                              EmergencyContactRepository emergencyContactRepository,
+                              UserService userService) {
+        this.repository = repository;
+        this.sectionRepository = sectionRepository;
+        this.subjectRepository = subjectRepository;
+        this.classRepository = classRepository;
+        this.teacherRepository = teacherRepository;
+        this.emergencyContactRepository = emergencyContactRepository;
+        this.userService = userService;
+    }
 
     @Override
     public List<StudentDto> getAll() {
@@ -151,7 +165,8 @@ public class StudentServiceImpl implements StudentService {
                     .toList();
             dto.setEmergencyContacts(emergencyContacts);
         }
-        if (student.getFileB64() != null) dto.setFileB64(String.valueOf(student.getFileB64()));
+        if (student.getFileB64() != null) dto.setFileB64(Base64.getEncoder().encodeToString(student.getFileB64()));
+        if (student.getFileType() != null) dto.setFileType(student.getFileType());
         if (student.getFileName() != null) dto.setFileName(student.getFileName());
         return dto;
     }
@@ -185,7 +200,8 @@ public class StudentServiceImpl implements StudentService {
                     .toList();
             student.setEmergencyContacts(emergencyContacts);
         }
-        if (dto.getFileB64() != null) student.setFileB64(dto.getFileB64().getBytes());
+        if (dto.getFileB64() != null) student.setFileB64(Base64.getDecoder().decode(dto.getFileB64()));
+        if (dto.getFileType() != null) student.setFileType(dto.getFileType());
         if (dto.getFileName() != null) student.setFileName(dto.getFileName());
         return student;
     }

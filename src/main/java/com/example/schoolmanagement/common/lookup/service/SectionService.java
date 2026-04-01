@@ -3,17 +3,18 @@ package com.example.schoolmanagement.common.lookup.service;
 import com.example.schoolmanagement.common.lookup.dto.SectionDto;
 import com.example.schoolmanagement.common.lookup.model.StudentSection;
 import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SectionService {
 
-    @Autowired
-    private SectionRepository repository;
+
+    private final SectionRepository repository;
 
     public List<SectionDto> getAll() {
         List<StudentSection> sections = repository.findAll(Sort.by("sectionName"));

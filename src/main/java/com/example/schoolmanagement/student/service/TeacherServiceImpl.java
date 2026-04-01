@@ -11,7 +11,7 @@ import com.example.schoolmanagement.common.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -132,7 +132,8 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             dto.setSubjectIds(subjects);
         }
-        if (teacher.getFileB64() != null) dto.setFileB64(String.valueOf(teacher.getFileB64()));
+        if (teacher.getFileB64() != null) dto.setFileB64(Base64.getEncoder().encodeToString(teacher.getFileB64()));
+        if (teacher.getFileType() != null) dto.setFileType(teacher.getFileType());
         if (teacher.getFileName() != null) dto.setFileName(teacher.getFileName());
         return dto;
     }
@@ -155,7 +156,8 @@ public class TeacherServiceImpl implements TeacherService {
                     .toList();
             teacher.setSubjects(subjects);
         }
-        if (dto.getFileB64() != null) teacher.setFileB64(dto.getFileB64().getBytes());
+        if (dto.getFileB64() != null) teacher.setFileB64(Base64.getDecoder().decode(dto.getFileB64()));
+        if (dto.getFileType() != null) teacher.setFileType(dto.getFileType());
         if (dto.getFileName() != null) teacher.setFileName(dto.getFileName());
         return teacher;
     }

@@ -3,16 +3,17 @@ package com.example.schoolmanagement.common.lookup.service;
 import com.example.schoolmanagement.common.lookup.dto.ClassDto;
 import com.example.schoolmanagement.common.lookup.model.StudentClass;
 import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ClassService {
-    @Autowired
-    private ClassRepository repository;
+
+    private final ClassRepository repository;
 
     public List<ClassDto> getAll() {
         List<StudentClass> classes = repository.findAll(Sort.by("id"));

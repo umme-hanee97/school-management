@@ -3,16 +3,17 @@ package com.example.schoolmanagement.common.lookup.service;
 import com.example.schoolmanagement.common.lookup.dto.RelationshipDto;
 import com.example.schoolmanagement.common.lookup.model.Relationship;
 import com.example.schoolmanagement.common.lookup.repository.RelationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RelationService {
 
-    @Autowired
-    private RelationRepository repository;
+
+    private final RelationRepository repository;
 
     public List<RelationshipDto> getAll() {
         List<Relationship> relationships = repository.findAll(Sort.by("relationship"));

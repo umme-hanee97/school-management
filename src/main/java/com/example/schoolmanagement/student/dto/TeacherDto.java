@@ -21,6 +21,7 @@ public class TeacherDto {
     private List<Long> subjectIds;
     private List<String> subjectNames;
     private String fileB64;
+    private String fileType;
     private String fileName;
 
 }

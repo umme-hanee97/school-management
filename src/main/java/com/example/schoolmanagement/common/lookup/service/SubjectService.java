@@ -3,17 +3,18 @@ package com.example.schoolmanagement.common.lookup.service;
 import com.example.schoolmanagement.common.lookup.dto.SubjectDto;
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SubjectService {
 
-    @Autowired
-    private SubjectRepository repository;
+
+    private final SubjectRepository repository;
 
     public List<SubjectDto> getAll() {
         List<StudentSubject> subjects = repository.findAll(Sort.by("subjectName"));

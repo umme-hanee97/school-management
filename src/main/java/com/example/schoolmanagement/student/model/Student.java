@@ -58,6 +58,9 @@ public class Student {
     private List<StudentSubject> subjects;
     @Column(name = "file_b64", columnDefinition = "mediumblob")
     private byte[] fileB64;
+    @Column(name = "file_type")
+    @Size(min = 1, max = 8, message = "File type must be between 1 and 8 characters")
+    private String fileType;
     @Column(name = "file_name")
     @Size(min = 1, max = 255, message = "File name must be between 1 and 255 characters")
     private String fileName;

@@ -2,8 +2,6 @@ package com.example.schoolmanagement.student.service;
 
 import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.student.dto.StudentDto;
-import jakarta.transaction.Transactional;
-
 import java.util.List;
 
 public interface StudentService {

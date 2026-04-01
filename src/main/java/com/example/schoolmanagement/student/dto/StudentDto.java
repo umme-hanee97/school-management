@@ -29,6 +29,7 @@ public class StudentDto {
     private Long teacherId;
     private List<Long> emergencyContacts;
     private String fileB64;
+    private String fileType;
     private String fileName;
 
 }

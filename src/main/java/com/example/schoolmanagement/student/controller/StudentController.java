@@ -13,9 +13,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class StudentController {
 
-    private final StudentService service;
+    private StudentService service;
 
-    private StudentController(StudentService service) {
+    public StudentController(StudentService service) {
         this.service = service;
     }
 
