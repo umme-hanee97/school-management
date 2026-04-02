@@ -18,15 +18,17 @@ public class StudentDto {
     private String motherName;
     private String email;
     private String phoneNumber;
-//    private boolean isActive = true;
     private String address;
     private String dateOfBirth;
     private Long classId;
     private String className;
     private Long sectionId;
+    private String sectionName;
     private List<Long> subjects;
+    private List<String> subjectNames;
     private Integer rollNumber;
     private Long teacherId;
+    private String teacherName;
     private List<Long> emergencyContacts;
     private String fileB64;
     private String fileType;

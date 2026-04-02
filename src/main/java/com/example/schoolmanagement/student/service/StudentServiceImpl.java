@@ -151,14 +151,22 @@ public class StudentServiceImpl implements StudentService {
         if (student.getStudentClass() != null) dto.setClassId(student.getStudentClass().getId());
         if (student.getStudentClass() != null) dto.setClassName(student.getStudentClass().getClassName());
         if (student.getSection() != null) dto.setSectionId(student.getSection().getId());
+        if (student.getSection() != null) dto.setSectionName(student.getSection().getSectionName());
         if (student.getSubjects() != null) {
             List<Long> subjects = student.getSubjects().stream()
                     .map(subject -> subject.getId())
                     .toList();
             dto.setSubjects(subjects);
         }
+        if (student.getSubjects() != null) {
+            List<String> subjects = student.getSubjects().stream()
+                    .map(subject -> subject.getSubjectName())
+                    .toList();
+            dto.setSubjectNames(subjects);
+        }
         if (student.getRollNumber() != null) dto.setRollNumber(student.getRollNumber());
         if (student.getTeacher() != null) dto.setTeacherId(student.getTeacher().getId());
+        if (student.getTeacher() != null) dto.setTeacherName(student.getTeacher().getName());
         if (student.getEmergencyContacts() != null) {
             List<Long> emergencyContacts = student.getEmergencyContacts().stream()
                     .map(emergencyContact -> emergencyContact.getId())
