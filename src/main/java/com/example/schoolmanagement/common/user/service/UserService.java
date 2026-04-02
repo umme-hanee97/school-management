@@ -8,9 +8,9 @@ import java.util.List;
 public interface UserService {
     List<UserDto> getAll();
     UserDto getById(Long id);
-    UserDto get(String username);
-    String saveData(UserDto userDto);
-    String updateData(String username, UserDto userDto);
+    UserDto get(String username) throws ErrorHandler;
+    UserDto saveData(UserDto userDto);
+    UserDto updateData(String username, UserDto userDto) throws ErrorHandler;
     void delete(String username);
     boolean usernameExists(String username);
     boolean emailExists(String email);

@@ -46,23 +46,39 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto get(String username) {
-        Optional<User> user = userRepository.findByName(username);
-        return user.map(oUser -> mapToDto(oUser, new UserDto())).orElseThrow(RuntimeException::new);
+    public UserDto get(String username) throws ErrorHandler {
+        User user = userRepository.findByName(username).get();
+        try {
+            if (user == null) {
+                throw new ErrorHandler("User with name " + username + " not found!");
+            }
+            return mapToDto(user, new UserDto());
+        } catch (Exception e) {
+            throw new ErrorHandler("Error occurred!!", e);
+        }
     }
 
     @Override
-    public String saveData(UserDto userDto) {
+    public UserDto saveData(UserDto userDto) {
         User user = new User();
         mapToEntity(user, userDto);
-        return userRepository.save(user).getName();
+        userRepository.save(user);
+        return userDto;
     }
 
     @Override
-    public String updateData(String username, UserDto userDto) {
-        User user = userRepository.findByName(username).orElseThrow(RuntimeException::new);
-        mapToEntity(user, userDto);
-        return userRepository.save(user).getName();
+    public UserDto updateData(String username, UserDto userDto) throws ErrorHandler {
+        try {
+            if (!usernameExists(username)){
+                throw new ErrorHandler("User with name " + username + " not found!");
+            }
+            User oUser = userRepository.findByName(username).get();
+            User user = mapToEntity(oUser, userDto);
+            userRepository.save(user);
+            return userDto;
+        } catch (Exception e) {
+            throw new ErrorHandler("Error occurred!!", e);
+        }
     }
 
     @Override
@@ -83,23 +99,23 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto changePassword(UserDto dto, String newPassword) throws ErrorHandler {
         UserDto userDto = get(dto.getName());
-        try{
-            if (!encoder().encode(dto.getPassword()).equals(userDto.getPassword())){
+        try {
+            if (!encoder().matches(dto.getPassword(), userDto.getPassword())) {
                 throw new ErrorHandler("Current password is incorrect!");
             }
-            userDto.setPassword(encoder().encode(newPassword));
+            userDto.setPassword(newPassword);
             updateData(dto.getName(), userDto);
             return userDto;
         } catch (Exception e) {
-            throw new ErrorHandler("Error occurred!!", e.getCause());
+            throw new ErrorHandler("Error occurred!!", e);
         }
     }
 
     private UserDto mapToDto(User user, UserDto dto) {
-        dto.setName(user.getName());
-        dto.setPassword(user.getPassword());
-        dto.setEmail(user.getEmail());
-        dto.setRoles(user.getRoles() == null ? null : user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()));
+        if (user.getName() != null) dto.setName(user.getName());
+        if (user.getPassword() != null) dto.setPassword(user.getPassword());
+        if (user.getEmail() != null) dto.setEmail(user.getEmail());
+        if (user.getRoles() != null) dto.setRoles(user.getRoles() == null ? null : user.getRoles().stream().map(Roles::getName).collect(Collectors.toSet()));
         return dto;
     }
 
@@ -108,11 +124,13 @@ public class UserServiceImpl implements UserService{
         if (dto.getPassword() != null) user.setPassword(encoder().encode(dto.getPassword()));
         if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         user.setEnabled(true);
-        List<Roles> roles = rolesRepository.findAllById(dto.getRoles() == null ? Collections.EMPTY_LIST : dto.getRoles());
-        if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())) {
-            throw new RuntimeException("One of roles not found!");
+        if (dto.getRoles() != null) {
+            List<Roles> roles = rolesRepository.findAllById(dto.getRoles() == null ? Collections.EMPTY_LIST : dto.getRoles());
+            if (roles.size() != (dto.getRoles() == null ? 0 : dto.getRoles().size())) {
+                throw new RuntimeException("One of roles not found!");
+            }
+            user.setRoles(roles.stream().collect(Collectors.toSet()));
         }
-        user.setRoles(roles.stream().collect(Collectors.toSet()));
         return user;
     }
 }

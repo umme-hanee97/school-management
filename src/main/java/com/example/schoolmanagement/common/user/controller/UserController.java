@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.common.user.controller;
 
+import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.common.model.MessageResponse;
 import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.common.user.service.UserService;
@@ -36,8 +37,12 @@ public class UserController {
 
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getUserByName(@PathVariable String username) {
-        UserDto user = service.get(username);
-        return ResponseEntity.ok(user);
+        try{
+            UserDto user = service.get(username);
+            return ResponseEntity.ok(user);
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
     @GetMapping("/{id}")
@@ -65,8 +70,12 @@ public class UserController {
 
     @PutMapping("/{username}")
     public ResponseEntity<?> updateData(@PathVariable String username, @RequestBody @Valid UserDto userDto) {
-        service.updateData(username, userDto);
-        return ResponseEntity.ok().build();
+        try {
+            service.updateData(username, userDto);
+            return ResponseEntity.ok().build();
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
     @PostMapping("/change-password")
@@ -77,8 +86,8 @@ public class UserController {
             userDto.setPassword(requestBody.get("currentPassword"));
             String newPassword = requestBody.get("newPassword");
             service.changePassword(userDto, newPassword);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (ErrorHandler e) {
             return ResponseEntity.badRequest().body(e.getCause());
         }
     }
