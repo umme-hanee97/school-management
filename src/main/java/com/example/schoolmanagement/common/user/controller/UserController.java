@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,6 +67,20 @@ public class UserController {
     public ResponseEntity<?> updateData(@PathVariable String username, @RequestBody @Valid UserDto userDto) {
         service.updateData(username, userDto);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> requestBody) {
+        try {
+            UserDto userDto = new UserDto();
+            userDto.setName(requestBody.get("name"));
+            userDto.setPassword(requestBody.get("currentPassword"));
+            String newPassword = requestBody.get("newPassword");
+            service.changePassword(userDto, newPassword);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
     @DeleteMapping("/{username}")
