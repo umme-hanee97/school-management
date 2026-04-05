@@ -7,6 +7,7 @@ import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.common.user.dto.UserDto;
 import com.example.schoolmanagement.common.user.service.UserService;
+import com.example.schoolmanagement.student.dto.EmergencyContactDto;
 import com.example.schoolmanagement.student.dto.StudentDto;
 import com.example.schoolmanagement.student.model.EmergencyContact;
 import com.example.schoolmanagement.student.model.Student;
@@ -136,6 +137,11 @@ public class StudentServiceImpl implements StudentService {
         } else {
             throw new RuntimeException("Student not found with id: " + id);
         }
+    }
+
+    @Override
+    public EmergencyContactDto addEmergencyContact(EmergencyContactDto dto) throws ErrorHandler {
+        return null;
     }
 
     private StudentDto mapToDto(Student student) {

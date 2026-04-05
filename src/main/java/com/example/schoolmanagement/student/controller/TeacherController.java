@@ -31,7 +31,7 @@ public class TeacherController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
-        TeacherDto teacher = service.getById(id);
+;        TeacherDto teacher = service.getById(id);
         return ResponseEntity.ok(teacher);
     }
 
