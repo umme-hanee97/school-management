@@ -2,6 +2,7 @@ package com.example.schoolmanagement.student.service;
 
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
+import com.example.schoolmanagement.common.lookup.repository.RelationRepository;
 import com.example.schoolmanagement.common.lookup.repository.SectionRepository;
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.common.model.ErrorHandler;
@@ -37,13 +38,16 @@ public class StudentServiceImpl implements StudentService {
 
     private UserService userService;
 
+    private RelationRepository relationRepository;
+
     public StudentServiceImpl(StudentRepository repository,
                               SectionRepository sectionRepository,
                               SubjectRepository subjectRepository,
                               ClassRepository classRepository,
                               TeacherRepository teacherRepository,
                               EmergencyContactRepository emergencyContactRepository,
-                              UserService userService) {
+                              UserService userService,
+                              RelationRepository relationRepository) {
         this.repository = repository;
         this.sectionRepository = sectionRepository;
         this.subjectRepository = subjectRepository;
@@ -51,6 +55,7 @@ public class StudentServiceImpl implements StudentService {
         this.teacherRepository = teacherRepository;
         this.emergencyContactRepository = emergencyContactRepository;
         this.userService = userService;
+        this.relationRepository = relationRepository;
     }
 
     @Override
@@ -141,7 +146,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public EmergencyContactDto addEmergencyContact(EmergencyContactDto dto) throws ErrorHandler {
-        return null;
+            EmergencyContact emergencyContact = new EmergencyContact();
+            if (dto.getId() != null) emergencyContact.setId(dto.getId());
+            if (dto.getName() != null) emergencyContact.setName(dto.getName());
+            if (dto.getPhoneNumber() != null) emergencyContact.setPhoneNumber(dto.getPhoneNumber());
+            if (dto.getEmail() != null) emergencyContact.setEmail(dto.getEmail());
+            if (dto.getRelationshipId() != null) emergencyContact.setRelationshipId(relationRepository.findById(dto.getRelationshipId()).get());
+            if (dto.getStudentId() != null) emergencyContact.setStudentId(repository.findById(dto.getStudentId()).get());
+            try {
+                emergencyContactRepository.save(emergencyContact);
+                return dto;
+            } catch (Exception e) {
+                throw new ErrorHandler("Error Occurred!!", e);
+            }
     }
 
     private StudentDto mapToDto(Student student) {
@@ -173,9 +190,9 @@ public class StudentServiceImpl implements StudentService {
         if (student.getRollNumber() != null) dto.setRollNumber(student.getRollNumber());
         if (student.getTeacher() != null) dto.setTeacherId(student.getTeacher().getId());
         if (student.getTeacher() != null) dto.setTeacherName(student.getTeacher().getName());
-        if (student.getEmergencyContacts() != null) {
-            List<Long> emergencyContacts = student.getEmergencyContacts().stream()
-                    .map(emergencyContact -> emergencyContact.getId())
+        if (student.getId() != null) {
+            List<EmergencyContactDto> emergencyContacts = emergencyContactRepository.findByStudentId(dto.getId()).stream()
+                    .map(emergencyContact -> mapToEmergencyContactDto(emergencyContact))
                     .toList();
             dto.setEmergencyContacts(emergencyContacts);
         }
@@ -208,16 +225,27 @@ public class StudentServiceImpl implements StudentService {
         }
         if (dto.getRollNumber() != null) student.setRollNumber(dto.getRollNumber());
         if (dto.getTeacherId() != null) student.setTeacher(teacherRepository.getById(dto.getTeacherId()));
-        if (dto.getEmergencyContacts() != null) {
-            List<EmergencyContact> emergencyContacts = dto.getEmergencyContacts().stream()
-                    .map(emergencyContact -> emergencyContactRepository.findById(emergencyContact).get())
-                    .toList();
-            student.setEmergencyContacts(emergencyContacts);
-        }
+//        if (dto.getEmergencyContacts() != null) {
+//            List<EmergencyContact> emergencyContacts = dto.getEmergencyContacts().stream()
+//                    .map(emergencyContact -> emergencyContactRepository.findById(emergencyContact).get())
+//                    .toList();
+//            student.setEmergencyContacts(emergencyContacts);
+//        }
         if (dto.getFileB64() != null) student.setFileB64(Base64.getDecoder().decode(dto.getFileB64()));
         if (dto.getFileType() != null) student.setFileType(dto.getFileType());
         if (dto.getFileName() != null) student.setFileName(dto.getFileName());
         return student;
+    }
+
+    private EmergencyContactDto mapToEmergencyContactDto(EmergencyContact emergencyContact) {
+        EmergencyContactDto dto = new EmergencyContactDto();
+        if (emergencyContact.getId() != null) dto.setId(emergencyContact.getId());
+        if (emergencyContact.getName() != null) dto.setName(emergencyContact.getName());
+        if (emergencyContact.getPhoneNumber() != null) dto.setPhoneNumber(emergencyContact.getPhoneNumber());
+        if (emergencyContact.getEmail() != null) dto.setEmail(emergencyContact.getEmail());
+        if (emergencyContact.getRelationshipId() != null) dto.setRelationshipId(emergencyContact.getRelationshipId().getId());
+        if (emergencyContact.getStudentId() != null) dto.setStudentId(emergencyContact.getStudentId().getId());
+        return dto;
     }
 
 }

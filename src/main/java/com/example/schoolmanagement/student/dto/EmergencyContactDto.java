@@ -10,7 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmergencyContactDto {
     private Long id;
-    private List<Long> studentId;
+    private Long studentId;
     private String name;
     private Long relationshipId;
     private String relationshipName;

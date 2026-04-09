@@ -20,8 +20,9 @@ public class EmergencyContact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany(mappedBy = "emergencyContacts")
-    private List<Student> studentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student studentId;
     @Column(nullable = false, name = "name")
     @Size(min = 2, max = 255, message = "Name must be between 2 and 255 characters")
     private String name;

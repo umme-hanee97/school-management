@@ -70,7 +70,4 @@ public class Student {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher")
     private Teacher teacher;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "emergency_contacts", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "emergency_contact_id"))
-    private List<EmergencyContact> emergencyContacts;
 }

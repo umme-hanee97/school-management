@@ -1,6 +1,7 @@
 package com.example.schoolmanagement.student.controller;
 
 import com.example.schoolmanagement.common.model.ErrorHandler;
+import com.example.schoolmanagement.student.dto.EmergencyContactDto;
 import com.example.schoolmanagement.student.dto.StudentDto;
 import com.example.schoolmanagement.student.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,16 @@ public class StudentController {
     public ResponseEntity<?> updateData(@PathVariable Long id, @RequestBody StudentDto dto) {
         String name = service.updateData(id, dto);
         return ResponseEntity.ok(name);
+    }
+
+    @PostMapping("/addEmergencyContact")
+    public ResponseEntity<?> addEmergencyContact(@RequestBody EmergencyContactDto dto) {
+        try {
+            service.addEmergencyContact(dto);
+            return ResponseEntity.ok(HttpStatus.CREATED);
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
 }

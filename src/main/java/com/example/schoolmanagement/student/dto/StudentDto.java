@@ -29,7 +29,8 @@ public class StudentDto {
     private Integer rollNumber;
     private Long teacherId;
     private String teacherName;
-    private List<Long> emergencyContacts;
+    private List<Long> emergencyContactsIds;
+    private List<EmergencyContactDto> emergencyContacts;
     private String fileB64;
     private String fileType;
     private String fileName;
