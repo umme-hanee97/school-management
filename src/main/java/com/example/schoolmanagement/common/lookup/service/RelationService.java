@@ -40,11 +40,13 @@ public class RelationService {
     }
 
     private Relationship mapToEntity(Relationship relationship, RelationshipDto dto) {
+        if (dto.getId() != null) relationship.setId(dto.getId());
         if (dto.getRelationship() != null) relationship.setRelationship(dto.getRelationship());
         return relationship;
     }
 
     private RelationshipDto mapToDto(Relationship relationship, RelationshipDto dto) {
+        if (relationship.getId() != null) dto.setId(relationship.getId());
         if (relationship.getRelationship() != null) dto.setRelationship(relationship.getRelationship());
         return dto;
     }
