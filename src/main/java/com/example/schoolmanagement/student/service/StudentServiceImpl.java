@@ -17,6 +17,7 @@ import com.example.schoolmanagement.student.repository.StudentRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
@@ -24,21 +25,21 @@ import java.util.Set;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private StudentRepository repository;
+    private final StudentRepository repository;
 
-    private SectionRepository sectionRepository;
+    private final SectionRepository sectionRepository;
 
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
 
-    private ClassRepository classRepository;
+    private final ClassRepository classRepository;
 
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
 
-    private EmergencyContactRepository emergencyContactRepository;
+    private final EmergencyContactRepository emergencyContactRepository;
 
-    private UserService userService;
+    private final UserService userService;
 
-    private RelationRepository relationRepository;
+    private final RelationRepository relationRepository;
 
     public StudentServiceImpl(StudentRepository repository,
                               SectionRepository sectionRepository,
@@ -115,7 +116,7 @@ public class StudentServiceImpl implements StudentService {
             student = mapToEntity(dto);
             repository.save(student);
             return dto;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorHandler("Error Occurred!!", e);
         }
     }
@@ -146,19 +147,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public EmergencyContactDto addEmergencyContact(EmergencyContactDto dto) throws ErrorHandler {
-            EmergencyContact emergencyContact = new EmergencyContact();
-            if (dto.getId() != null) emergencyContact.setId(dto.getId());
-            if (dto.getName() != null) emergencyContact.setName(dto.getName());
-            if (dto.getPhoneNumber() != null) emergencyContact.setPhoneNumber(dto.getPhoneNumber());
-            if (dto.getEmail() != null) emergencyContact.setEmail(dto.getEmail());
-            if (dto.getRelationshipId() != null) emergencyContact.setRelationshipId(relationRepository.findById(dto.getRelationshipId()).get());
-            if (dto.getStudentId() != null) emergencyContact.setStudentId(repository.findById(dto.getStudentId()).get());
-            try {
-                emergencyContactRepository.save(emergencyContact);
-                return dto;
-            } catch (Exception e) {
-                throw new ErrorHandler("Error Occurred!!", e);
-            }
+        EmergencyContact emergencyContact = new EmergencyContact();
+        if (dto.getId() != null) emergencyContact.setId(dto.getId());
+        if (dto.getName() != null) emergencyContact.setName(dto.getName());
+        if (dto.getPhoneNumber() != null) emergencyContact.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getEmail() != null) emergencyContact.setEmail(dto.getEmail());
+        if (dto.getRelationshipId() != null)
+            emergencyContact.setRelationshipId(relationRepository.findById(dto.getRelationshipId()).get());
+        if (dto.getStudentId() != null) emergencyContact.setStudentId(repository.findById(dto.getStudentId()).get());
+        try {
+            emergencyContactRepository.save(emergencyContact);
+            return dto;
+        } catch (Exception e) {
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
     }
 
     private StudentDto mapToDto(Student student) {
@@ -191,10 +193,12 @@ public class StudentServiceImpl implements StudentService {
         if (student.getTeacher() != null) dto.setTeacherId(student.getTeacher().getId());
         if (student.getTeacher() != null) dto.setTeacherName(student.getTeacher().getName());
         if (student.getId() != null) {
-            List<EmergencyContactDto> emergencyContacts = emergencyContactRepository.findByStudentId(dto.getId()).stream()
-                    .map(emergencyContact -> mapToEmergencyContactDto(emergencyContact))
-                    .toList();
-            dto.setEmergencyContacts(emergencyContacts);
+            List<EmergencyContact> emergencyContacts = emergencyContactRepository.findByStudentId(dto.getId());
+            if (!emergencyContacts.isEmpty()) {
+                List<EmergencyContactDto> emgConDto = emergencyContacts.stream().map(emergencyContact -> mapToEmergencyContactDto(emergencyContact)).toList();
+
+                dto.setEmergencyContacts(emgConDto);
+            }
         }
         if (student.getFileB64() != null) dto.setFileB64(Base64.getEncoder().encodeToString(student.getFileB64()));
         if (student.getFileType() != null) dto.setFileType(student.getFileType());
@@ -243,7 +247,10 @@ public class StudentServiceImpl implements StudentService {
         if (emergencyContact.getName() != null) dto.setName(emergencyContact.getName());
         if (emergencyContact.getPhoneNumber() != null) dto.setPhoneNumber(emergencyContact.getPhoneNumber());
         if (emergencyContact.getEmail() != null) dto.setEmail(emergencyContact.getEmail());
-        if (emergencyContact.getRelationshipId() != null) dto.setRelationshipId(emergencyContact.getRelationshipId().getId());
+        if (emergencyContact.getRelationshipId() != null) {
+            dto.setRelationshipId(emergencyContact.getRelationshipId().getId());
+            dto.setRelationshipName(relationRepository.findById(emergencyContact.getRelationshipId().getId()).get().getRelationship());
+        }
         if (emergencyContact.getStudentId() != null) dto.setStudentId(emergencyContact.getStudentId().getId());
         return dto;
     }
