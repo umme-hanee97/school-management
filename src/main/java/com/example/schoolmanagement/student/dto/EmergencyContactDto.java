@@ -3,7 +3,6 @@ package com.example.schoolmanagement.student.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
 @Getter
 @Setter

@@ -178,16 +178,14 @@ public class StudentServiceImpl implements StudentService {
         if (student.getSection() != null) dto.setSectionId(student.getSection().getId());
         if (student.getSection() != null) dto.setSectionName(student.getSection().getSectionName());
         if (student.getSubjects() != null) {
-            List<Long> subjects = student.getSubjects().stream()
+            List<Long> subjectIds = student.getSubjects().stream()
                     .map(subject -> subject.getId())
                     .toList();
-            dto.setSubjects(subjects);
-        }
-        if (student.getSubjects() != null) {
-            List<String> subjects = student.getSubjects().stream()
+            List<String> subjectNames = student.getSubjects().stream()
                     .map(subject -> subject.getSubjectName())
                     .toList();
-            dto.setSubjectNames(subjects);
+            dto.setSubjectNames(subjectNames);
+            dto.setSubjects(subjectIds);
         }
         if (student.getRollNumber() != null) dto.setRollNumber(student.getRollNumber());
         if (student.getTeacher() != null) dto.setTeacherId(student.getTeacher().getId());
@@ -219,12 +217,7 @@ public class StudentServiceImpl implements StudentService {
         if (dto.getClassId() != null) student.setStudentClass(classRepository.findById(dto.getClassId()).get());
         if (dto.getSectionId() != null) student.setSection(sectionRepository.findById(dto.getSectionId()).get());
         if (dto.getSubjects() != null) {
-            List<StudentSubject> subjects = dto.getSubjects().stream()
-                    .map(subjectId -> {
-                        StudentSubject subject = subjectRepository.findById(subjectId).get();
-                        return subject;
-                    })
-                    .toList();
+            List<StudentSubject> subjects =  subjectRepository.findAllById(dto.getSubjects());
             student.setSubjects(subjects);
         }
         if (dto.getRollNumber() != null) student.setRollNumber(dto.getRollNumber());
