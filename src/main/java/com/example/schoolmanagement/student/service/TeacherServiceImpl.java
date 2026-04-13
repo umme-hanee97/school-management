@@ -82,6 +82,7 @@ public class TeacherServiceImpl implements TeacherService {
             dto.setId(teacher.getId());
         }
         teacher = mapToEntity(dto);
+        teacher.setProfileStatus("Pending");
         repository.save(teacher);
         return dto;
         } catch (Exception e){

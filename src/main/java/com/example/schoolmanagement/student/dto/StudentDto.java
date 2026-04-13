@@ -34,5 +34,6 @@ public class StudentDto {
     private String fileB64;
     private String fileType;
     private String fileName;
+    private String profileStatus;
 
 }

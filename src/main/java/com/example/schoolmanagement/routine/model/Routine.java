@@ -21,8 +21,20 @@ public class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 20, name = "day")
     private String day;
-    private LocalTime time;
+    @Column(nullable = false, name = "start_time")
+    private LocalTime startTime;
+    @Column(nullable = false, name = "end_time")
+    private LocalTime endTime;
+    @Column(nullable = false, name = "period")
+    private Integer period;
+    @Column(name = "break_time")
+    private Integer breakTime;
+    @Column(nullable = false, name = "room_number")
+    private String roomNumber;
+    @Column(nullable = false, name = "duration_in_minutes")
+    private Integer durationInMinutes;
     @ManyToMany
     @JoinTable(
         name = "routine_subjects",
@@ -43,5 +55,6 @@ public class Routine {
     @OneToOne
     @JoinColumn(name = "section_id")
     private StudentSection section;
-
+    @Column(nullable = false, length = 20, name = "status")
+    private String status;
 }

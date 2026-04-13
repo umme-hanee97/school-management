@@ -114,6 +114,7 @@ public class StudentServiceImpl implements StudentService {
                 dto.setId(student.getId());
             }
             student = mapToEntity(dto);
+            student.setProfileStatus("Pending");
             repository.save(student);
             return dto;
         } catch (Exception e) {
@@ -201,6 +202,7 @@ public class StudentServiceImpl implements StudentService {
         if (student.getFileB64() != null) dto.setFileB64(Base64.getEncoder().encodeToString(student.getFileB64()));
         if (student.getFileType() != null) dto.setFileType(student.getFileType());
         if (student.getFileName() != null) dto.setFileName(student.getFileName());
+        if (student.getProfileStatus() != null) dto.setProfileStatus(student.getProfileStatus());
         return dto;
     }
 
@@ -231,6 +233,7 @@ public class StudentServiceImpl implements StudentService {
         if (dto.getFileB64() != null) student.setFileB64(Base64.getDecoder().decode(dto.getFileB64()));
         if (dto.getFileType() != null) student.setFileType(dto.getFileType());
         if (dto.getFileName() != null) student.setFileName(dto.getFileName());
+        if (dto.getProfileStatus() != null) student.setProfileStatus(dto.getProfileStatus());
         return student;
     }
 

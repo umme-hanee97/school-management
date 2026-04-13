@@ -12,7 +12,12 @@ import java.util.List;
 public class RoutineDto {
     private Long id;
     private String day;
-    private LocalTime time;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private Integer period;
+    private Integer breakTime;
+    private String roomNumber;
+    private Integer durationInMinutes;
     private List<Long> subjectIds;
     private List<String> subjectNames;
     private List<Long> teacherIds;

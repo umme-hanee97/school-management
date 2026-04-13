@@ -53,9 +53,13 @@ public class RoutineServiceImpl implements RoutineService {
     @Override
     public RoutineDto createRoutine(RoutineDto routineDto) throws ErrorHandler {
         try {
-        Routine routine = mapToEntity(routineDto);
-        routineRepository.save(routine);
-        return routineDto;
+            if (routineDto.getStartTime().isAfter(routineDto.getEndTime()) || routineDto.getPeriod() == null || routineDto.getDurationInMinutes() == null) {
+                throw new ErrorHandler("Start time, end time, period and duration must be provided and valid");
+            }
+            Routine routine = mapToEntity(routineDto);
+            routine.setStatus("Pending");
+            routineRepository.save(routine);
+            return routineDto;
         } catch (Exception e) {
             throw new ErrorHandler("Error Occurred!!", e);
         }
@@ -63,14 +67,31 @@ public class RoutineServiceImpl implements RoutineService {
 
     @Override
     public void deleteRoutine(Long id) {
+        Routine routine = routineRepository.findById(id).orElseThrow(() -> new RuntimeException("Routine not found"));
+        routineRepository.delete(routine);
+    }
 
+    @Override
+    public void updateStatus(Long id, String status) throws ErrorHandler {
+        try {
+            Routine routine = routineRepository.findById(id).orElseThrow(() -> new ErrorHandler("Routine not found"));
+            routine.setStatus(status);
+            routineRepository.save(routine);
+        } catch (Exception e) {
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
     }
 
     private RoutineDto mapToDto(Routine routine) {
         RoutineDto dto = new RoutineDto();
         if (routine.getId() != null) dto.setId(routine.getId());
         if (routine.getDay() != null) dto.setDay(routine.getDay());
-        if (routine.getTime() != null) dto.setTime(routine.getTime());
+        if (routine.getStartTime() != null) dto.setStartTime(routine.getStartTime());
+        if (routine.getEndTime() != null) dto.setEndTime(routine.getEndTime());
+        if (routine.getPeriod() != null) dto.setPeriod(routine.getPeriod());
+        if (routine.getBreakTime() != null) dto.setBreakTime(routine.getBreakTime());
+        if (routine.getRoomNumber() != null) dto.setRoomNumber(routine.getRoomNumber());
+        if (routine.getDurationInMinutes() != null) dto.setDurationInMinutes(routine.getDurationInMinutes());
         if (routine.getSubject() != null) {
             dto.setSubjectIds(routine.getSubject().stream().map(StudentSubject::getId).toList());
             dto.setSubjectNames(routine.getSubject().stream().map(StudentSubject::getSubjectName).toList());
@@ -94,7 +115,12 @@ public class RoutineServiceImpl implements RoutineService {
         Routine routine = new Routine();
         if (dto.getId() != null) routine.setId(dto.getId());
         if (dto.getDay() != null) routine.setDay(dto.getDay());
-        if (dto.getTime() != null) routine.setTime(dto.getTime());
+        if (dto.getStartTime() != null) routine.setStartTime(dto.getStartTime());
+        if (dto.getEndTime() != null) routine.setEndTime(dto.getEndTime());
+        if (dto.getPeriod() != null) routine.setPeriod(dto.getPeriod());
+        if (dto.getBreakTime() != null) routine.setBreakTime(dto.getBreakTime());
+        if (dto.getRoomNumber() != null) routine.setRoomNumber(dto.getRoomNumber());
+        if (dto.getDurationInMinutes() != null) routine.setDurationInMinutes(dto.getDurationInMinutes());
         if (!dto.getSubjectIds().isEmpty()) {
             List<StudentSubject> subjects = subjectRepository.findAllById(dto.getSubjectIds());
             routine.setSubject(subjects);

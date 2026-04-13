@@ -49,4 +49,6 @@ public class Teacher {
     private String fileName;
     @Column(name = "is_active")
     private boolean isActive = true;
+    @Column(nullable = false, length = 20, name = "profile_status")
+    private String profileStatus;
 }

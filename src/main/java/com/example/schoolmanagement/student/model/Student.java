@@ -70,4 +70,6 @@ public class Student {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher")
     private Teacher teacher;
+    @Column(nullable = false, length = 20, name = "profile_status")
+    private String profileStatus;
 }

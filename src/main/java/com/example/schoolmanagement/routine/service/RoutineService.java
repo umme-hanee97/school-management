@@ -9,4 +9,5 @@ public interface RoutineService {
     List<RoutineDto> getRoutinesByClassAndSection(Long classId, Long sectionId) throws ErrorHandler;
     RoutineDto createRoutine(RoutineDto routineDto) throws ErrorHandler;
     void deleteRoutine(Long id);
+    void updateStatus(Long id, String status) throws ErrorHandler;
 }
