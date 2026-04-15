@@ -13,6 +13,7 @@ import java.util.List;
 public class ClassService {
 
     private final ClassRepository repository;
+    private final SectionService sectionService;
 
     public List<ClassDto> getAll() {
         List<StudentClass> classes = repository.findAll(Sort.by("id"));
@@ -20,7 +21,10 @@ public class ClassService {
     }
 
     public List<ClassDto> getAllClassWithSection() {
-        return repository.findAllClassWithSection();
+        List<StudentClass> classes = repository.findAll(Sort.by("id"));
+        List<ClassDto> classesDto = classes.stream().map(studentClass -> mapToDto(studentClass, new ClassDto())).toList();
+        classesDto.forEach(c -> c.setSections(sectionService.getAll()));
+        return classesDto;
     }
 
     public ClassDto getById(Long id) {

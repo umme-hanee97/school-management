@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,6 +15,5 @@ public class ClassDto {
     private Long id;
     private String className;
     private String classNameCode;
-    private Long sectionId;
-    private String sectionName;
+    private List<SectionDto> sections;
 }
