@@ -6,7 +6,6 @@ import com.example.schoolmanagement.common.lookup.repository.ClassRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -18,6 +17,10 @@ public class ClassService {
     public List<ClassDto> getAll() {
         List<StudentClass> classes = repository.findAll(Sort.by("id"));
         return classes.stream().map(studentClass -> mapToDto(studentClass, new ClassDto())).toList();
+    }
+
+    public List<ClassDto> getAllClassWithSection() {
+        return repository.findAllClassWithSection();
     }
 
     public ClassDto getById(Long id) {

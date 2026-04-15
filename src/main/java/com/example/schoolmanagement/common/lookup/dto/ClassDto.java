@@ -13,4 +13,6 @@ public class ClassDto {
     private Long id;
     private String className;
     private String classNameCode;
+    private Long sectionId;
+    private String sectionName;
 }

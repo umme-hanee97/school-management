@@ -19,12 +19,15 @@ public class ClassController {
     @Autowired
     private ClassService service;
 
-    @Autowired
-    private ClassRepository repository;
-
     @GetMapping
     public ResponseEntity<?> getAllData() {
         List<ClassDto> classes = service.getAll();
+        return ResponseEntity.ok(classes);
+    }
+
+    @GetMapping("/with-section")
+    public ResponseEntity<?> getAllClassWithSection() {
+        List<ClassDto> classes = service.getAllClassWithSection();
         return ResponseEntity.ok(classes);
     }
 
