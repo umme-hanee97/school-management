@@ -67,6 +67,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentDto> getAllByClassIdAndSectionId(Long classId, Long sectionId) {
+        List<Student> students = repository.findByStudentClassIdAndSectionIdAndIsActiveTrue(classId, sectionId, true);
+        if (!students.isEmpty()) {
+            return students.stream().map(this::mapToDto)
+                    .toList();
+        } else {
+            return List.of();
+        }
+    }
+
+    @Override
     public StudentDto getById(Long id) {
         Student student = repository.findById(id).orElseThrow(RuntimeException::new);
         return student != null ? mapToDto(student) : new StudentDto();

@@ -10,6 +10,8 @@ import java.util.List;
 public interface StudentService {
     List<StudentDto> getAll();
 
+    List<StudentDto> getAllByClassIdAndSectionId(Long classId, Long sectionId);
+
     StudentDto getById(Long id);
 
     StudentDto getByEmail(String email);

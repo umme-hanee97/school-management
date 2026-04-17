@@ -26,6 +26,12 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
+    @GetMapping("/class/{classId}/section/{sectionId}")
+    public ResponseEntity<?> getAllByClassIdAndSectionId(@PathVariable Long classId, @PathVariable Long sectionId) {
+        List<StudentDto> students = service.getAllByClassIdAndSectionId(classId, sectionId);
+        return ResponseEntity.ok(students);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         StudentDto student = service.getById(id);

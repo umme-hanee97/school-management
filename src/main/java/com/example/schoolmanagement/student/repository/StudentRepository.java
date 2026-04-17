@@ -15,4 +15,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query(value = "SELECT COUNT(*) FROM school.students WHERE is_active = true", nativeQuery = true)
     Integer countStudent();
+
+    List<Student> findByStudentClassIdAndSectionIdAndIsActiveTrue(Long classId, Long sectionId, boolean b);
 }
