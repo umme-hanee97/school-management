@@ -1,6 +1,7 @@
 package com.example.schoolmanagement.routine.service;
 
 import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
+import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.routine.dto.PeriodDto;
 import com.example.schoolmanagement.routine.model.Period;
 import com.example.schoolmanagement.routine.repository.PeriodRepository;
@@ -24,23 +25,38 @@ public class PeriodServiceImpl implements PeriodService{
     }
 
     @Override
-    public PeriodDto saveOrUpdatePeriod(PeriodDto periodDto) {
-
-        return null;
+    public PeriodDto saveOrUpdatePeriod(PeriodDto periodDto) throws ErrorHandler {
+        try {
+            if (periodDto.getStartTime().isAfter(periodDto.getEndTime()) || periodDto.getDurationInMinutes() == null) {
+                throw new ErrorHandler("Start time, end time and duration must be provided and valid");
+            }
+            Period period = mapToEntity(periodDto);
+            periodRepository.save(period);
+            return mapToDto(period);
+        } catch (Exception e) {
+            throw new ErrorHandler("Error Occurred!!", e);
+        }
     }
 
     @Override
     public List<PeriodDto> getAllPeriods() {
-        return List.of();
+        List<PeriodDto> periods = periodRepository.findAll().stream().map(this::mapToDto).toList();
+        return periods;
     }
 
     @Override
-    public PeriodDto getPeriodById(Long id) {
-        return null;
+    public PeriodDto getPeriodById(Long id) throws ErrorHandler {
+            Period period = periodRepository.findById(id).orElse(null);
+            if (period != null) {
+                return mapToDto(period);
+            } else {
+                throw new ErrorHandler("Period not found with id: " + id);
+            }
     }
 
     @Override
     public List<PeriodDto> getPeriodsByRoutineId(Long routineId) {
+
         return List.of();
     }
 
