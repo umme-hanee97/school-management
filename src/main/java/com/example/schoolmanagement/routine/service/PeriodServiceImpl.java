@@ -4,8 +4,10 @@ import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.routine.dto.PeriodDto;
 import com.example.schoolmanagement.routine.model.Period;
+import com.example.schoolmanagement.routine.model.Routine;
 import com.example.schoolmanagement.routine.repository.PeriodRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -31,6 +33,9 @@ public class PeriodServiceImpl implements PeriodService{
                 throw new ErrorHandler("Start time, end time and duration must be provided and valid");
             }
             Period period = mapToEntity(periodDto);
+            if (period.getId() == null) {
+                period.setStatus("Pending");
+            }
             periodRepository.save(period);
             return mapToDto(period);
         } catch (Exception e) {
