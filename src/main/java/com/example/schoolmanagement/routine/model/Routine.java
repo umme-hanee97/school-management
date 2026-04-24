@@ -22,10 +22,4 @@ public class Routine {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Column(nullable = false)
     private List<Period> period;
-    @ManyToOne
-    @JoinColumn(name = "class_id")
-    private StudentClass classId;
-    @OneToOne
-    @JoinColumn(name = "section")
-    private StudentSection section;
 }

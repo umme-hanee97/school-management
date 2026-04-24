@@ -32,7 +32,8 @@ public class PeriodServiceImpl implements PeriodService{
             if (periodDto.getStartTime().isAfter(periodDto.getEndTime()) || periodDto.getDurationInMinutes() == null) {
                 throw new ErrorHandler("Start time, end time and duration must be provided and valid");
             }
-            Period period = mapToEntity(periodDto);
+            Period period;
+            period = mapToEntity(periodDto);
             if (period.getId() == null) {
                 period.setStatus("Pending");
             }

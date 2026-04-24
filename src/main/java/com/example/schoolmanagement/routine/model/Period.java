@@ -1,5 +1,7 @@
 package com.example.schoolmanagement.routine.model;
 
+import com.example.schoolmanagement.common.lookup.model.StudentClass;
+import com.example.schoolmanagement.common.lookup.model.StudentSection;
 import com.example.schoolmanagement.common.lookup.model.StudentSubject;
 import com.example.schoolmanagement.student.model.Teacher;
 import jakarta.persistence.*;
@@ -35,6 +37,12 @@ public class Period {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private StudentClass classId;
+    @OneToOne
+    @JoinColumn(name = "section")
+    private StudentSection section;
     @Column(nullable = false, length = 20, name = "status")
     private String status;
 

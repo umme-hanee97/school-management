@@ -96,10 +96,10 @@ public class RoutineServiceImpl implements RoutineService {
 //            dto.setClassId(routine.getClassName().getId());
 //            dto.setClassName(routine.getClassName().getClassName());
 //        }
-        if (routine.getSection() != null) {
-            dto.setSectionId(routine.getSection().getId());
-            dto.setSectionName(routine.getSection().getSectionName());
-        }
+//        if (routine.getSection() != null) {
+//            dto.setSectionId(routine.getSection().getId());
+//            dto.setSectionName(routine.getSection().getSectionName());
+//        }
         return dto;
     }
 
@@ -124,9 +124,9 @@ public class RoutineServiceImpl implements RoutineService {
 //        if (dto.getClassId() != null) {
 //            classRepository.findById(dto.getClassId()).ifPresent(routine::setClassName);
 //        }
-        if (dto.getSectionId() != null) {
-            sectionRepository.findById(dto.getSectionId()).ifPresent(routine::setSection);
-        }
+//        if (dto.getSectionId() != null) {
+//            sectionRepository.findById(dto.getSectionId()).ifPresent(routine::setSection);
+//        }
         return routine;
     }
 }
