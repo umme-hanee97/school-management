@@ -9,10 +9,11 @@ import com.example.schoolmanagement.routine.repository.PeriodRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class PeriodServiceImpl implements PeriodService{
+public class PeriodServiceImpl implements PeriodService {
 
     private final PeriodRepository periodRepository;
     private final SubjectRepository subjectRepository;
@@ -28,15 +29,17 @@ public class PeriodServiceImpl implements PeriodService{
 
     @Override
     public PeriodDto saveOrUpdatePeriod(PeriodDto periodDto) throws ErrorHandler {
+        if (periodDto.getStartTime().isAfter(periodDto.getEndTime()) || periodDto.getDurationInMinutes() == null) {
+            throw new ErrorHandler("Start time, end time and duration must be provided and valid");
+        }
         try {
-            if (periodDto.getStartTime().isAfter(periodDto.getEndTime()) || periodDto.getDurationInMinutes() == null) {
-                throw new ErrorHandler("Start time, end time and duration must be provided and valid");
-            }
-            Period period;
-            period = mapToEntity(periodDto);
-            if (period.getId() == null) {
+            Period period = periodRepository.findById(periodDto.getId()).get();
+            if (period == null) {
                 period.setStatus("Pending");
+            } else {
+                periodDto.setId(period.getId());
             }
+            period = mapToEntity(periodDto);
             periodRepository.save(period);
             return mapToDto(period);
         } catch (Exception e) {
@@ -52,12 +55,12 @@ public class PeriodServiceImpl implements PeriodService{
 
     @Override
     public PeriodDto getPeriodById(Long id) throws ErrorHandler {
-            Period period = periodRepository.findById(id).orElse(null);
-            if (period != null) {
-                return mapToDto(period);
-            } else {
-                throw new ErrorHandler("Period not found with id: " + id);
-            }
+        Period period = periodRepository.findById(id).orElse(null);
+        if (period != null) {
+            return mapToDto(period);
+        } else {
+            throw new ErrorHandler("Period not found with id: " + id);
+        }
     }
 
     @Override

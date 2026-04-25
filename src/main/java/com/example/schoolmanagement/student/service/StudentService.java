@@ -14,7 +14,7 @@ public interface StudentService {
 
     StudentDto getById(Long id);
 
-    StudentDto getByEmail(String email);
+    StudentDto getByEmail(String email) throws ErrorHandler;
 
     StudentDto saveData(StudentDto dto) throws ErrorHandler;
 

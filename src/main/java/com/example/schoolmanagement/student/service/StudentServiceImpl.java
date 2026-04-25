@@ -84,12 +84,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentDto getByEmail(String email) {
+    public StudentDto getByEmail(String email) throws ErrorHandler {
         Student student = repository.findByEmail(email);
         if (student != null) {
             return mapToDto(student);
         } else {
-            throw new RuntimeException("Student not found with email: " + email);
+            throw new ErrorHandler("Student not found with email: " + email);
         }
     }
 
