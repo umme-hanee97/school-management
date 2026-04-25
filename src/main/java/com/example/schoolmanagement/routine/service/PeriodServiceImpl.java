@@ -4,12 +4,9 @@ import com.example.schoolmanagement.common.lookup.repository.SubjectRepository;
 import com.example.schoolmanagement.common.model.ErrorHandler;
 import com.example.schoolmanagement.routine.dto.PeriodDto;
 import com.example.schoolmanagement.routine.model.Period;
-import com.example.schoolmanagement.routine.model.Routine;
 import com.example.schoolmanagement.routine.repository.PeriodRepository;
 import com.example.schoolmanagement.student.repository.TeacherRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -31,6 +28,9 @@ public class PeriodServiceImpl implements PeriodService {
     public PeriodDto saveOrUpdatePeriod(PeriodDto periodDto) throws ErrorHandler {
         if (periodDto.getStartTime().isAfter(periodDto.getEndTime()) || periodDto.getDurationInMinutes() == null) {
             throw new ErrorHandler("Start time, end time and duration must be provided and valid");
+        }
+        if (periodDto.getDurationInMinutes() > 30) {
+            throw new ErrorHandler("Duration must be more than 30 minutes.");
         }
         try {
             Period period = periodRepository.findById(periodDto.getId()).get();
@@ -64,9 +64,10 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public List<PeriodDto> getPeriodsByRoutineId(Long routineId) {
-
-        return List.of();
+    public List<PeriodDto> getPeriodsByClassIdAndSectionId(Long classId, Long sectionId) {
+        List<Period> periodList = periodRepository.findAllByClassIdAndSectionId(classId, sectionId);
+        List<PeriodDto> periodDtos = periodList.stream().map(period -> mapToDto(period)).toList();
+        return periodDtos;
     }
 
     @Override

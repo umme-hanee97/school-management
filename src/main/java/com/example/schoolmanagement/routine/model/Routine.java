@@ -1,12 +1,9 @@
 package com.example.schoolmanagement.routine.model;
 
-import com.example.schoolmanagement.common.lookup.model.StudentClass;
-import com.example.schoolmanagement.common.lookup.model.StudentSection;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter

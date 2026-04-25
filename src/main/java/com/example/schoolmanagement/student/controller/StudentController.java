@@ -40,8 +40,12 @@ public class StudentController {
 
     @GetMapping("/email/{email}")
     public ResponseEntity<?> getByEmail(@PathVariable String email) {
-        StudentDto student = service.getByEmail(email);
-        return ResponseEntity.ok(student);
+        try {
+            StudentDto student = service.getByEmail(email);
+            return ResponseEntity.ok(student);
+        } catch (ErrorHandler e) {
+            return ResponseEntity.badRequest().body(e.getCause());
+        }
     }
 
     @PostMapping
